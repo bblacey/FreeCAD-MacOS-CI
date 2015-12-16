@@ -2,7 +2,6 @@ sudo: false
 language: cpp
 os:
 - osx
-
 before_install:
 - system_profiler SPHardwareDataType
 - brew update
@@ -12,7 +11,7 @@ before_install:
 - brew install --without-framework --without-soqt sanelson/freecad/coin
 - brew install --HEAD pivy
 - pip install --upgrade pip setuptools
-- pip install matplotlib
+- pip install matplotlib==1.4.3
 - git clone https://github.com/Heeks/libarea.git ./libarea
 - pushd ./libarea && mkdir build && cd build
 - cmake -DCMAKE_INSTALL_PREFIX:PATH=/usr/ -DPYTHON_DIR=$(python-config --exec-prefix)/bin/ ../
@@ -48,9 +47,8 @@ before_deploy:
 deploy:
   provider: releases
   api_key:
-    secure: 1g1niXRAyDjYGMMwcWVDTjMjV6z3ErYkNx1PzR7Clq2ygDO0smpwAJ0QUxtTwn2BvnhdCqRNcGIHUugHCvB5XxgbVQZCTZCbbIt3hTLK7+FMXb5QT2ROokPrLuzPgoHSsPNqR++LRCarjk6xtzGaGTLDtv58BaiantMjQ9dGzzifFEgHVCGSMkSfRhdkc1hwQsDlvSbZfKl8vt0GLSGuMcCcBovpUHJ59Aqv0Kg7QhhCzqcUSnb//1IvF9wOcRB0VjuRQvoTPwMe2Qf2XtFxqjern0DhZR0DlvzjZcTh6joWrHJraouuUM6psV6cl0b3KGQCCWGBxUaMbdxurRLaMm2T6v0nzV2veeAcdocCJ6Ii3p5b3SXuySyUK+I4OJ0rU315d5yzveIy1kTQMJtaYRABcKaiQ+bxcFcnBP+k11S00mTmPsZT8fu6iGi/vCHAOn72xcD+URPhW2X4wnVQfIXACmKgRy1LrSajv2trAZHFkEnOFqiK2rSZxYAtiHcRODFNhYiWBlLdc0E1b3Dc7JZ56JWKx4wtU8Xp9YtAeTZ2Gj6aD/rkIN/+PpGaGqhgCEn7A8QHSgz+xkSP+Nfw1+TucPhGoEsV4JICAjS9b7h0SyOVKTqc2R8ip3Crya5u1lUREPdlPDdnrdMg7cEhvVNoIcXL3M0TV/xXaJZvOIE=
-  file: /usr/local/${DEPLOY_ARCHIVE_NAME}.zip
-  skip_cleanup: true
+    secure: KmqX9HZ+MIiVBcPbwSsee615i0bvmnaWjbDbQeVh0QeRQdMETtvHDLlAv4btiXVs2ffzu6xWN5QOUI6r54VOCsh4QlID5i55wn6OhdqVlkV59SyZQhgoRjT6rKH4RGDqeu6HVLbR02Oiwn/KDDwWhInjr42H/Mll3naPYTfUtoHR37cJE4+JLyVBfjMueVOffFs1tGohMe/HzeE8eFS5MMwQxj+ip6jQsGIXNACBCJPEB8vhcj3ANSqk4LwhYvIptOeH1eggBQAXJIWFC5wasA7W4xVdyVdTwy5dyvdb2nKMJ1awVqj4NgWAbJJ9wBSdDlEOQsI4baMSe7Qq4LfP5W/kwt7upD7y/r0yLrsbuj7SwKjWWlJqC22sJBagXhrdu5kbjDxdPAsCDtGZpsh+0mI0OH8ToiLsQy6PSKTMhxKf74bKP9dGZmQEdCICtR/DEYvJS//6XWnlmMcgwvKMaX6RHhsJTAlWz8Jb0eqe4JzFfGEBAgABhAIr4K6A6oBCV38mmVGbzFLcKKP3SglWEgQgRKRPjf+tq8hbesGa+tZjK04VgUoBU3rzGSZ3K/l2XY+yetRXGvZJO7YIcA4poV3TMG8Aglu5SuN07b8KCW/oUD6CMp+wwVzx4wrBSIVE02y9R07qlA6YaDmMuup2RH1KN26dbjlrxqB+qZ5qIC4=
+  file: "/usr/local/${DEPLOY_ARCHIVE_NAME}.zip"
   on:
     repo: bblacey/FreeCAD-MacOS-CI
     all_branches: true
@@ -62,5 +60,4 @@ notifications:
       secure: SEwbkIvChyaUwuXhtXPIMISAlWPSHx5PQH/YkHZn83fnaOYCJRfkare6NIeBGm5ruxZmETeS1D9rHqohSBVXeGqgCp5VfGacZ0/d/spnq2gb+MqT2/fzbjB/RHpZWuxL4P7j7kTdqOq/jO35aQa+df512cwrmkA4ZWLnFR47EgvWdBjP73DMSes5cIR3rr6ftASYyVfI1IlUZsBgZFJf9KZ+Mb/VRCo6CvO5S08ZEdww0i5fzNx/H0DkxMul2TDH9mc+RFD8n+8Q/ihJhP84b8+XGwjQJwvNWqIFpNya3gaDzjidI8w3R8uekOBlRgK5IBpgyXQfY3BCmvyfurIeKoqGxSPUxz3jXdGfObCfCQ6H6oDFuBAfozx5aBlYSiaUdiZ7Y6RMUK3PyVBAiHNsjknRhWBIMvebp8nTQPvCRRFXwK2LRpwuVB9gh9fq9YATFjphSu9seX54U0mpX3DnfAAHb1BXnFm3IlU3V1KIAI53m9WGO4FSWbwafcrGTg4zIIH8RI8X7b0Z3Ay6DpYcwj8zUnajCJAgfil7dSMC+4fL/+b7KacqTv8YAHZkNTktjvh9pEzS+K9JkuLVMklt4J8L0hl68gy0/e1pfi6EBAeQHis6aG5XW7tF9dTI0kF/yrSfTFIHc0L+BRx2xQ7vbgWnyHsN+TUTXqgjRriXKrM=
     users:
       secure: hDFxK5UrjzSQoMoayjfFZU5q2ddJAymS2jIQWQedMGYlTnUilRtpZl4UuOHd59ZnDtcNVP86olUKgYJc/PaIyZZpOafyDyttkNmzV/09EapdSwM4AaTU04QxMNhle7nqCqigza0maDiKFM+LyZMXvsa91A85U2Y93kMtzh2m0yetHau7a97aKNK/B94uRKuNxdvZID+i/BA13OqJGz/JKiYt6S3yEowTSEzbx9plKxbLb3qaI5i3T7mx2CedbQPopMy5wILxCv1fhqyC2+JvH0scuTM54Y1AOJZr6JZo3nNys8fWFqoWUtBdBZcv+qRWljJBKXDGK0iYrh09CG4TXxv61MOqnNm2oQRPwJ3KeVs4dsMeyZI7V94gV5fnUOxgEu7a6ImzAiuQITaG6AWl4h1nURHGfKNJeJ+wgjkuCZLUEZV3vPnEpH87jpyXfzM7vVh/NdRN+/pPN9dKb8Q9QsizsgK1NW/o63g07RnOVMxxNKCe16foad6n7uf6vuIIufJrC2U+FtWklWqq7VJCp2znrBiUf5EEoiziIbcHn4B2kSmOEIn8YLqrf1vytUdYy0BY8IdO7qZ15nhQelDwHDAd3fK7J066GeXevSgJwZ20uYgYTdD2tOp8UuqjW3Le715hy/w96OWUUfUOw+Qyj6+q2ig78DbYcKlL4sKKHq0=
-    template:  "%{repository}#%{build_number} (%{branch} - %{commit} : %{author}): %{message}"
-
+    template: "%{repository}#%{build_number} (%{branch} - %{commit} : %{author}): %{message}"
