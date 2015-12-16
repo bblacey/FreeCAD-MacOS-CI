@@ -27,6 +27,8 @@ class Node:
         return not self.__eq__(other)
     def __hash__(self):
         return hash(self.name)
+    def __str__(self):
+        return self.path + '/' + self.name
         
 class DepsGraph:
     graph = {}
@@ -62,6 +64,9 @@ class DepsGraph:
                         if not self.graph[ck]._marked:
                             stack.append(ck)
                     operation(self, self.graph[node_key], *op_args)
+
+        def __str__(self):
+	    return self.visit(print_node, ['none'])
 
 def is_macho(path):
     output = subprocess.check_output(["file", path])
@@ -130,13 +135,14 @@ def create_dep_nodes(install_names, search_paths):
 
         if install_path != "" and lib[0] != "@":
             #we have an absolte path install name
-            if not path:
+            if not path and os.path.exists(install_path):
                 path = install_path
        
-        if not path:
-            raise LibraryNotFound(lib_name + "not found in given paths")
-
-        nodes.append(Node(lib_name, path))
+        if path is None:
+	    print "****WARNING:  Library {} not found in search paths...  skipping...  executable may be invalid...".format(lib)
+	    #raise LibraryNotFound("Library " + lib + " not found in search paths: {}".format(search_paths))            
+	else:
+            nodes.append(Node(lib_name, path))
     
     return nodes
 
@@ -220,6 +226,9 @@ def build_deps_graph(graph, bundle_path, dirs_filter=None, search_paths=[]):
                     if not visited[dk]:
                         stack.append(dk)
 
+def print_node(graph, node, third_arg):
+    print "node: {}".format(node)
+
 def in_bundle(lib, bundle_path):
     if lib.startswith(bundle_path):
         return True
@@ -276,6 +285,7 @@ def main():
 
     build_deps_graph(graph, bundle_path, dir_filter, search_paths)
 
+    '''print "Graph: {}".format(graph)'''
     graph.visit(copy_into_bundle, [bundle_path])
     graph.visit(add_rpaths, [bundle_path])
 
