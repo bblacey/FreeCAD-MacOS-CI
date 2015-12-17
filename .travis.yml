@@ -6,6 +6,9 @@ os:
 
 before_install:
 - system_profiler SPHardwareDataType
+- ls -l /usr/local
+- find / -name '*matplotlib*' -exec ls -l {}
+- find / -name '*FreeCAD*' -exec ls -l {}
 - brew update
 - brew tap homebrew/science
 - brew tap sanelson/freecad
@@ -22,10 +25,10 @@ before_install:
 - if [ -e /usr/local/lib/libgdal.1.dylib ]; then brew unlink gdal; fi
 - brew list
 - brew info freetype
-- find . -name '*freetype*' -exec ls -l {} \;
+- find / -name '*freetype*' -exec ls -l {} \;
 
 install:
-- mkdir build && cd build && cmake -DFREECAD_USE_EXTERNAL_KDL=ON -DFREECAD_CREATE_MAC_APP=ON -FREETYPE_INCLUDE_DIR_freetype2=/usr/local/include/freetype2 ../
+- mkdir build && cd build && cmake -DFREECAD_USE_EXTERNAL_KDL=ON -DFREECAD_CREATE_MAC_APP=ON -DFREETYPE_INCLUDE_DIR_freetype2=/usr/local/include/freetype2 -DCMAKE_BUILD_TYPE=Debug ../
 
 script:
 - make -j2
@@ -34,7 +37,7 @@ script:
 - sleep 10 && pkill FreeCAD
 - cat /tmp/FreeCAD.log
 - grep --file=../.log_errors /tmp/FreeCAD.log ; [ $? == 1 ] && echo "No errors from .log_errors file found in the log after start from build directory" || ( echo "Error from .log_errors found!" && false )
-- sudo make install/fast
+- sudo make install
 - /usr/local/FreeCAD.app/Contents/bin/FreeCAD --run-test 0
 - /usr/local/FreeCAD.app/Contents/bin/FreeCAD --log-file /tmp/FreeCAD_installed.log &
 - sleep 10 && pkill FreeCAD
