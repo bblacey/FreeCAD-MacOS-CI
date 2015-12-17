@@ -4,6 +4,12 @@ language: cpp
 os:
 - osx
 
+cache:
+  directories:
+     - /Library/Caches/Homebrew
+     - $HOME/.cache/pip
+  
+
 before_install:
 - system_profiler SPHardwareDataType
 - #ls -l /usr/local
@@ -16,7 +22,10 @@ before_install:
 - brew install --without-framework --without-soqt sanelson/freecad/coin
 - brew install --HEAD pivy
 - pip install --quiet --upgrade pip setuptools
-- #pip install --quiet matplotlib==1.4.3
+- pip install virtualenv
+- virtualenv -p $(python-config --exec-path) venv
+- source venv/bin/activate
+- pip install --quiet matplotlib==1.4.3
 - git clone https://github.com/Heeks/libarea.git ./libarea
 - pushd ./libarea && mkdir build && cd build
 - cmake -DCMAKE_INSTALL_PREFIX:PATH=/usr/ -DPYTHON_DIR=$(python-config --exec-prefix)/bin/ ../
