@@ -7,8 +7,8 @@ os:
 before_install:
 - system_profiler SPHardwareDataType
 - ls -l /usr/local
-- find -x /usr -name '*matplotlib*' -and -not -path '/usr/sbin/' -exec ls -l {} \;
-- find -x /usr -name '*FreeCAD*' -not -path '/usr/sbin/' -exec ls -l {} \;
+- #find -x -path /usr -and -not -path '/usr/sbin' -name '*matplotlib*'  -exec ls -l {} \;
+- #find -x /usr -name '*FreeCAD*' -not -path '/usr/sbin/' -exec ls -l {} \;
 - brew update
 - brew tap homebrew/science
 - brew tap sanelson/freecad
@@ -16,7 +16,7 @@ before_install:
 - brew install --without-framework --without-soqt sanelson/freecad/coin
 - brew install --HEAD pivy
 - pip install --quiet --upgrade pip setuptools
-- pip install --quiet matplotlib==1.4.3
+- #pip install --quiet matplotlib==1.4.3
 - git clone https://github.com/Heeks/libarea.git ./libarea
 - pushd ./libarea && mkdir build && cd build
 - cmake -DCMAKE_INSTALL_PREFIX:PATH=/usr/ -DPYTHON_DIR=$(python-config --exec-prefix)/bin/ ../
@@ -25,7 +25,7 @@ before_install:
 - if [ -e /usr/local/lib/libgdal.1.dylib ]; then brew unlink gdal; fi
 - brew list
 - brew info freetype
-- find -x /usr -name '*freetype*' -and -not -path '/usr/sbin/' -exec ls -l {} \;
+- find -x /usr/lib -name '*freetype*' -exec ls -l {} \;
 
 install:
 - mkdir build && cd build && cmake -DFREECAD_USE_EXTERNAL_KDL=ON -DFREECAD_CREATE_MAC_APP=ON -DFREETYPE_INCLUDE_DIR_freetype2=/usr/local/include/freetype2 -DCMAKE_BUILD_TYPE=Debug ../
