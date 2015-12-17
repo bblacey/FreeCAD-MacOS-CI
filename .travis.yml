@@ -42,7 +42,9 @@ script:
 before_deploy:
 - export VSN=$(sed -E -n -e 's/(^#define FCRevision.*")([0-9]+)(.*Git.*$)/\2/p' ${TRAVIS_BUILD_DIR}/build/src/Build/Version.h)
 - export DEPLOY_ARCHIVE_NAME="FreeCAD_osx-${VSN}"
+- ls -l /usr/local
 - cd /usr/local && zip -r -X "${DEPLOY_ARCHIVE_NAME}.zip" FreeCAD.app -x FreeCAD.app/Contents/doc*
+- ls -l /usr/local
 
 deploy:
   provider: releases
