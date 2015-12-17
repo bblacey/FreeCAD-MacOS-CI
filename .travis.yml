@@ -9,7 +9,7 @@ before_install:
 - #ls -l /usr/local
 - #find -x -path /usr -and -not -path '/usr/sbin' -name '*matplotlib*'  -exec ls -l {} \;
 - #find -x /usr -name '*FreeCAD*' -not -path '/usr/sbin/' -exec ls -l {} \;
-- #brew update
+- brew update
 - brew tap homebrew/science
 - brew tap sanelson/freecad
 - brew install eigen freetype qt homebrew/science/oce python boost-python pyside pyside-tools xerces-c orocos-kdl
