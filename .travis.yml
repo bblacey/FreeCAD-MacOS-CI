@@ -23,7 +23,7 @@ before_install:
 - brew install --HEAD pivy
 - pip install --quiet --upgrade pip setuptools
 - pip install virtualenv
-- virtualenv -p $(python-config --exec-path) venv
+- virtualenv -p $(python-config --exec-prefix)/python2.7 venv
 - source venv/bin/activate
 - pip install --quiet matplotlib==1.4.3
 - git clone https://github.com/Heeks/libarea.git ./libarea
