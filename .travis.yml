@@ -7,8 +7,8 @@ os:
 before_install:
 - system_profiler SPHardwareDataType
 - ls -l /usr/local
-- find / -name '*matplotlib*' -exec ls -l {}
-- find / -name '*FreeCAD*' -exec ls -l {}
+- find / -name '*matplotlib*' -exec ls -l {} \;
+- find / -name '*FreeCAD*' -exec ls -l {} \;
 - brew update
 - brew tap homebrew/science
 - brew tap sanelson/freecad
