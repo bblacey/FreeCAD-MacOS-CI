@@ -21,10 +21,11 @@ before_install:
 - brew install eigen freetype qt homebrew/science/oce python boost-python pyside pyside-tools xerces-c orocos-kdl
 - brew install --without-framework --without-soqt sanelson/freecad/coin
 - brew install --HEAD pivy
-- pip install --quiet --upgrade pip setuptools
-- virtualenv -p $(python-config --exec-prefix)/bin/python2.7 venv
-- source venv/bin/activate
-- pip install --quiet matplotlib==1.4.3
+- ### Install matplotlib from source
+- brew install libpng 
+- git clone git://github.com/matplotlib/matplotlib.git
+- cd matplotlib && python setup.py install
+- ### Install libarea from source
 - git clone https://github.com/Heeks/libarea.git ./libarea
 - pushd ./libarea && mkdir build && cd build
 - cmake -DCMAKE_INSTALL_PREFIX:PATH=/usr/ -DPYTHON_DIR=$(python-config --exec-prefix)/bin/ ../
