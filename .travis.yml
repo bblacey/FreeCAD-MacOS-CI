@@ -5,7 +5,7 @@ os:
 - osx
 
 git:
-  depth: 1000
+  depth: 800
 
 cache:
   directories:
@@ -25,7 +25,6 @@ before_install:
 - brew install --without-framework --without-soqt sanelson/freecad/coin
 - brew install --HEAD pivy
 - ### Install matplotlib from source
-- brew install libpng 
 - git clone --depth 1 git://github.com/matplotlib/matplotlib.git
 - pushd matplotlib && python setup.py install
 - popd
@@ -41,7 +40,7 @@ before_install:
 - #find -x /usr/lib -name '*freetype*' -exec ls -l {} \;
 
 install:
-- mkdir build && cd build && cmake -DFREECAD_USE_EXTERNAL_KDL=ON -DFREECAD_CREATE_MAC_APP=ON -DFREETYPE_INCLUDE_DIR_freetype2=/usr/local/include/freetype2 -DCMAKE_BUILD_TYPE=Debug ../
+- mkdir build && cd build && cmake -DFREECAD_USE_EXTERNAL_KDL=ON -DFREECAD_CREATE_MAC_APP=ON -DCMAKE_BUILD_TYPE=Debug ../
 
 script:
 - #make -j2
@@ -58,22 +57,19 @@ script:
 - #grep --file=../.log_errors /tmp/FreeCAD_installed.log ; [ $? == 1 ] && echo "No errors from .log_errors file found in the log after start from /usr/local/bin" || ( echo "Error from .log_errors found!" && false )
 
 after_success:
-- #find -x ${TRAVIS_BUILD_DIR} -name 'Version.h' -exec cat {} \;
-- #python ${TRAVIS_BUILD_DIR}/src/Tools/SubWCRev.py
-- #find -x ${TRAVIS_BUILD_DIR} -name 'Version.h' -exec cat {} \;
 - export VSN=$(sed -E -n -e 's/(^#define FCRevision.*")([0-9]+)(.*Git.*$)/\2/p' ${TRAVIS_BUILD_DIR}/build/src/Build/Version.h)-${TRAVIS_COMMIT:0:7}
 - echo "Version = $VSN"
-- export DEPLOY_ARCHIVE_NAME="FreeCAD_osx-${VSN}"
-- ls -l /usr/local
-- cd /usr/local && zip -q -r -X "${DEPLOY_ARCHIVE_NAME}.zip" FreeCAD.app -x FreeCAD.app/Contents/doc*
-- ls -l /usr/local
+- export DEPLOYMENT_ARCHIVE="FreeCAD_osx-${VSN}.tgz"
+- #ls -l /usr/local
+- #cd /usr/local && zip -q -r -X "${DEPLOYMENT_ARCHIVE}.zip" FreeCAD.app -x FreeCAD.app/Contents/doc*
+- tar -cz -C /usr/local --exclude '*/doc/*' -f "${DEPLOYMENT_ARCHIVE}" FreeCAD.app
 - travis_retry curl --ftp-create-dirs -T ${DEPLOY_ARCHIVE_NAME}.zip -u ${FTP_USER}:${FTP_PASSWORD} ftp://${FTP_HOST}/${DEPLOY_ARCHIVE_NAME}.zip
 
 deploy:
   provider: releases
   api_key:
     secure: DlnEwU6+O3vt2mAy0lvD5qhsw8p4yo3eIpH6xRqU5goKfUYXWLU7h/+C2MQsyof6mD2ZPrHH7PHgwBdif2lcIy3aRDc+F3ocSQBEQcjm+FEq/vLNb3QR5q+k/sLl0u+Va/TamU/KLlTIRpDelWL/9Ik5NaGR7nvxkFw6a8fAkS1cTbqwMpPCtuju+Uv6Ahs7peYRkAVbalJ82oP3651pinHJKgljhY76+35IJS2H5mr2biFTGFBX/lnvfSxbhM5kKvJWBuYX3VWEuXcNE3o86itswruLEV4krJcyU6TUr8KA+uPBVgkf0TFQyPW1t7c6UH4KLSmqP8AmcfO+qzj2Ex+FqFNCubLyXHkED4Yss2OnxLh2J6sxzEyHhE5UXHHUAvOgeYATtMcQ9K6nHdUtIBoga14HMURJkcdQMel0Wc6t18MZrJnnzykzmqOVNpg1f1AcPcE0ZkLzaFA34Kq04DoHEB2LOscIAuC+sbXPHkb6cdycz5qP80a1VNMpek5QZgmjHhp1Vi2PdlMEl+ezp9e/QLfHjo4Yge98EtkiaiXH1DKARkJlKFXQL9OKKovnQtNRcvJhCUGymgTXXaBomyk6U0DWak8AONj7DYwtnVfFlBZ10TgCd+0oNuLtni9k64xc13aI224i0Y3BDrgn62ycAvha8Ecmn5nWbkzSva8=
-  file: "/usr/local/${DEPLOY_ARCHIVE_NAME}.zip"
+  file: "/usr/local/${DEPLOYMENT_ARCHIVE}"
   on:
     repo: bblacey/FreeCAD-MacOS-CI
     all_branches: true
