@@ -63,7 +63,7 @@ after_success:
 - #ls -l /usr/local
 - #cd /usr/local && zip -q -r -X "${DEPLOYMENT_ARCHIVE}.zip" FreeCAD.app -x FreeCAD.app/Contents/doc*
 - tar -cz -C /usr/local --exclude '*/doc/*' -f "${DEPLOYMENT_ARCHIVE}" FreeCAD.app
-- travis_retry curl --ftp-create-dirs -T ${DEPLOY_ARCHIVE_NAME}.zip -u ${FTP_USER}:${FTP_PASSWORD} ftp://${FTP_HOST}/${DEPLOY_ARCHIVE_NAME}.zip
+- travis_retry curl --ftp-create-dirs -T ${DEPLOYMENT_ARCHIVE} -u ${FTP_USER}:${FTP_PASSWORD} ftp://${FTP_HOST}/${DEPLOYMENT_ARCHIVE}
 
 deploy:
   provider: releases
