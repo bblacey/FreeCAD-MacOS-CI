@@ -15,9 +15,6 @@ cache:
 
 before_install:
 - system_profiler SPHardwareDataType
-- #ls -l /usr/local
-- #find -x -path /usr -and -not -path '/usr/sbin' -name '*matplotlib*'  -exec ls -l {} \;
-- #find -x /usr -name '*FreeCAD*' -not -path '/usr/sbin/' -exec ls -l {} \;
 - brew update
 - brew tap homebrew/science
 - brew tap sanelson/freecad
@@ -25,15 +22,16 @@ before_install:
 - brew install --without-framework --without-soqt sanelson/freecad/coin
 - brew install --HEAD pivy
 - ### Install matplotlib from source
-- git clone --depth 1 git://github.com/matplotlib/matplotlib.git
-- pushd matplotlib && python setup.py install
-- popd
+- #git clone --depth 1 git://github.com/matplotlib/matplotlib.git
+- #pushd matplotlib && python setup.py install
+- #popd
+- brew install matplotlib
 - ### Install libarea from source
 - git clone --depth 1 https://github.com/Heeks/libarea.git ./libarea
 - pushd ./libarea && mkdir build && cd build
-- #cmake -DCMAKE_INSTALL_PREFIX:PATH=/usr -DPYTHON_DIR=$(python-config --exec-prefix)/bin/ -DPython_FRAMEWORKS=$(python-config --../
+- cmake -DCMAKE_INSTALL_PREFIX:PATH=/usr -DPYTHON_DIR=$(python-config --exec-prefix)/bin/ -DPython_FRAMEWORKS=$(python-config --../
 - #cmake —DCMAKE_INSTALL_PREFIX:PATH=$(brew --prefix)/usr -DPYTHON_DIR=$(python-config --exec-prefix)/bin/ -DBoost_INCLUDE_DIR:PATH=$(brew --prefix)/include -DPython_FRAMEWORKS:PATH=$(python-config --prefix) ../
-- cmake —DCMAKE_INSTALL_PREFIX:PATH=$(brew --prefix)/usr -DPYTHON_DIR=$(python-config --exec-prefix)/bin/ -DBoost_INCLUDE_DIR:PATH=$(brew --prefix)/include -DPython_FRAMEWORKS:PATH=$(python-config --prefix) -DPYTHON_FRAMEWORK_INCLUDES:PATH=$(python-config --prefix)/include ../
+- #cmake —DCMAKE_INSTALL_PREFIX:PATH=$(brew --prefix)/usr -DPYTHON_DIR=$(python-config --exec-prefix)/bin/ -DBoost_INCLUDE_DIR:PATH=$(brew --prefix)/include -DPython_FRAMEWORKS:PATH=$(python-config --prefix) -DPYTHON_FRAMEWORK_INCLUDES:PATH=$(python-config --prefix)/include ../
 - make -j2 install
 - popd
 - if [ -e /usr/local/lib/libgdal.1.dylib ]; then brew unlink gdal; fi
@@ -52,11 +50,11 @@ script:
 - #cat /tmp/FreeCAD.log
 - #grep --file=../.log_errors /tmp/FreeCAD.log ; [ $? == 1 ] && echo "No errors from .log_errors file found in the log after start from build directory" || ( echo "Error from .log_errors found!" && false )
 - sudo make -j2 install
-- #/usr/local/FreeCAD.app/Contents/bin/FreeCAD --run-test 0
-- #/usr/local/FreeCAD.app/Contents/bin/FreeCAD --log-file /tmp/FreeCAD_installed.log &
-- #sleep 10 && pkill FreeCAD
-- #cat /tmp/FreeCAD_installed.log
-- #grep --file=../.log_errors /tmp/FreeCAD_installed.log ; [ $? == 1 ] && echo "No errors from .log_errors file found in the log after start from /usr/local/bin" || ( echo "Error from .log_errors found!" && false )
+- /usr/local/FreeCAD.app/Contents/bin/FreeCAD --run-test 0
+- /usr/local/FreeCAD.app/Contents/bin/FreeCAD --log-file /tmp/FreeCAD_installed.log &
+- sleep 10 && pkill FreeCAD
+- cat /tmp/FreeCAD_installed.log
+- grep --file=../.log_errors /tmp/FreeCAD_installed.log ; [ $? == 1 ] && echo "No errors from .log_errors file found in the log after start from /usr/local/bin" || ( echo "Error from .log_errors found!" && false )
 
 after_success:
 - export VSN=$(sed -E -n -e 's/(^#define FCRevision.*")([0-9]+)(.*Git.*$)/\2/p' ${TRAVIS_BUILD_DIR}/build/src/Build/Version.h)-${TRAVIS_COMMIT:0:7}
@@ -83,7 +81,9 @@ notifications:
       secure: SEwbkIvChyaUwuXhtXPIMISAlWPSHx5PQH/YkHZn83fnaOYCJRfkare6NIeBGm5ruxZmETeS1D9rHqohSBVXeGqgCp5VfGacZ0/d/spnq2gb+MqT2/fzbjB/RHpZWuxL4P7j7kTdqOq/jO35aQa+df512cwrmkA4ZWLnFR47EgvWdBjP73DMSes5cIR3rr6ftASYyVfI1IlUZsBgZFJf9KZ+Mb/VRCo6CvO5S08ZEdww0i5fzNx/H0DkxMul2TDH9mc+RFD8n+8Q/ihJhP84b8+XGwjQJwvNWqIFpNya3gaDzjidI8w3R8uekOBlRgK5IBpgyXQfY3BCmvyfurIeKoqGxSPUxz3jXdGfObCfCQ6H6oDFuBAfozx5aBlYSiaUdiZ7Y6RMUK3PyVBAiHNsjknRhWBIMvebp8nTQPvCRRFXwK2LRpwuVB9gh9fq9YATFjphSu9seX54U0mpX3DnfAAHb1BXnFm3IlU3V1KIAI53m9WGO4FSWbwafcrGTg4zIIH8RI8X7b0Z3Ay6DpYcwj8zUnajCJAgfil7dSMC+4fL/+b7KacqTv8YAHZkNTktjvh9pEzS+K9JkuLVMklt4J8L0hl68gy0/e1pfi6EBAeQHis6aG5XW7tF9dTI0kF/yrSfTFIHc0L+BRx2xQ7vbgWnyHsN+TUTXqgjRriXKrM=
     users:
       secure: hDFxK5UrjzSQoMoayjfFZU5q2ddJAymS2jIQWQedMGYlTnUilRtpZl4UuOHd59ZnDtcNVP86olUKgYJc/PaIyZZpOafyDyttkNmzV/09EapdSwM4AaTU04QxMNhle7nqCqigza0maDiKFM+LyZMXvsa91A85U2Y93kMtzh2m0yetHau7a97aKNK/B94uRKuNxdvZID+i/BA13OqJGz/JKiYt6S3yEowTSEzbx9plKxbLb3qaI5i3T7mx2CedbQPopMy5wILxCv1fhqyC2+JvH0scuTM54Y1AOJZr6JZo3nNys8fWFqoWUtBdBZcv+qRWljJBKXDGK0iYrh09CG4TXxv61MOqnNm2oQRPwJ3KeVs4dsMeyZI7V94gV5fnUOxgEu7a6ImzAiuQITaG6AWl4h1nURHGfKNJeJ+wgjkuCZLUEZV3vPnEpH87jpyXfzM7vVh/NdRN+/pPN9dKb8Q9QsizsgK1NW/o63g07RnOVMxxNKCe16foad6n7uf6vuIIufJrC2U+FtWklWqq7VJCp2znrBiUf5EEoiziIbcHn4B2kSmOEIn8YLqrf1vytUdYy0BY8IdO7qZ15nhQelDwHDAd3fK7J066GeXevSgJwZ20uYgYTdD2tOp8UuqjW3Le715hy/w96OWUUfUOw+Qyj6+q2ig78DbYcKlL4sKKHq0=
-    template: "%{repository}#%{build_number} (%{branch} - %{commit} : %{author}): %{message}"
+    template: 
+	- "%{repository}#%{build_number} (%{branch} - %{commit} : %{author}): %{message}"
+	- "Build URL: %{build_url}"
 
 env:
   global:
