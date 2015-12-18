@@ -7,12 +7,6 @@ os:
 git:
   depth: 800
 
-cache:
-  directories:
-     - /Library/Caches/Homebrew
-     - $HOME/.cache/pip
-  
-
 before_install:
 - system_profiler SPHardwareDataType
 - brew update
@@ -25,7 +19,7 @@ before_install:
 - #git clone --depth 1 git://github.com/matplotlib/matplotlib.git
 - #pushd matplotlib && python setup.py install
 - #popd
-- brew install matplotlib
+- brew install homebrew/python/matplotlib
 - ### Install libarea from source
 - git clone --depth 1 https://github.com/Heeks/libarea.git ./libarea
 - pushd ./libarea && mkdir build && cd build
