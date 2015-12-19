@@ -76,9 +76,10 @@ deploy:
     tags: true
 
 after_script:
+- if [ ${TRAVIS_TEST_RESULT} == 0 ]; then export MSG="PASSED"; else export MSG="FAILED"; fi
 - curl -s --form-string "token=${PO_APP}" --form-string "user=${PO_USER}" --form-string "html=1" --form-string 
- "message=FreeCAD OS X build ${VSN} <b>${TRAVIS_TEST_RESULT}</b> (${TAVIS_REPO_SLUG}#${TRAVIS_BUILD_NUMBER})</p> 
- <a href=\"https://api.travis-ci.org/jobs/${TRAVIS_JOB_ID}/log.txt?deansi=true\">Build Log</a>"
+ "message=FreeCAD OS X build ${VSN} <b>${MSG}</b> (${TAVIS_REPO_SLUG}#${TRAVIS_BUILD_NUMBER})</b></p> 
+ <a href=\"https://api.travis-ci.org/jobs/${TRAVIS_JOB_ID}/log.txt?deansi=true\">Build ${TRAVIS_BUILD_NUMBER} Log</a>"
  https://api.pushover.net/1/messages.json
 
 notifications:
