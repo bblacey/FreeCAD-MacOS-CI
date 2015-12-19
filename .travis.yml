@@ -54,6 +54,7 @@ after_success:
 - export VSN=$(sed -E -n -e 's/(^#define FCRevision.*")([0-9]+)(.*Git.*$)/\2/p' ${TRAVIS_BUILD_DIR}/build/src/Build/Version.h)-${TRAVIS_COMMIT:0:7}
 - echo "Version = $VSN"
 - export DEPLOYMENT_ARCHIVE="FreeCAD_osx-${VSN}.tgz"
+- echo $(git rev-parse master)
 - #ls -l /usr/local
 - #cd /usr/local && zip -q -r -X "${DEPLOYMENT_ARCHIVE}.zip" FreeCAD.app -x FreeCAD.app/Contents/doc*
 - tar -cz -C /usr/local --exclude '*/doc/*' -f "${DEPLOYMENT_ARCHIVE}" FreeCAD.app
@@ -63,7 +64,7 @@ deploy:
   provider: releases
   api_key:
     secure: DlnEwU6+O3vt2mAy0lvD5qhsw8p4yo3eIpH6xRqU5goKfUYXWLU7h/+C2MQsyof6mD2ZPrHH7PHgwBdif2lcIy3aRDc+F3ocSQBEQcjm+FEq/vLNb3QR5q+k/sLl0u+Va/TamU/KLlTIRpDelWL/9Ik5NaGR7nvxkFw6a8fAkS1cTbqwMpPCtuju+Uv6Ahs7peYRkAVbalJ82oP3651pinHJKgljhY76+35IJS2H5mr2biFTGFBX/lnvfSxbhM5kKvJWBuYX3VWEuXcNE3o86itswruLEV4krJcyU6TUr8KA+uPBVgkf0TFQyPW1t7c6UH4KLSmqP8AmcfO+qzj2Ex+FqFNCubLyXHkED4Yss2OnxLh2J6sxzEyHhE5UXHHUAvOgeYATtMcQ9K6nHdUtIBoga14HMURJkcdQMel0Wc6t18MZrJnnzykzmqOVNpg1f1AcPcE0ZkLzaFA34Kq04DoHEB2LOscIAuC+sbXPHkb6cdycz5qP80a1VNMpek5QZgmjHhp1Vi2PdlMEl+ezp9e/QLfHjo4Yge98EtkiaiXH1DKARkJlKFXQL9OKKovnQtNRcvJhCUGymgTXXaBomyk6U0DWak8AONj7DYwtnVfFlBZ10TgCd+0oNuLtni9k64xc13aI224i0Y3BDrgn62ycAvha8Ecmn5nWbkzSva8=
-  file: "/usr/local/${DEPLOYMENT_ARCHIVE}"
+  file: "${DEPLOYMENT_ARCHIVE}"
   on:
     repo: bblacey/FreeCAD-MacOS-CI
     all_branches: true
