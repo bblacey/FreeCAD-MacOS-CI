@@ -19,7 +19,7 @@ before_install:
 - #git clone --depth 1 git://github.com/matplotlib/matplotlib.git
 - #pushd matplotlib && python setup.py install
 - #popd
-- brew install homebrew/python/matplotlib
+- #brew install homebrew/python/matplotlib
 - ### Install libarea from source
 - #git clone --depth 1 https://github.com/Heeks/libarea.git ./libarea
 - #pushd ./libarea && mkdir build && cd build
@@ -69,6 +69,7 @@ deploy:
   api_key:
     secure: DlnEwU6+O3vt2mAy0lvD5qhsw8p4yo3eIpH6xRqU5goKfUYXWLU7h/+C2MQsyof6mD2ZPrHH7PHgwBdif2lcIy3aRDc+F3ocSQBEQcjm+FEq/vLNb3QR5q+k/sLl0u+Va/TamU/KLlTIRpDelWL/9Ik5NaGR7nvxkFw6a8fAkS1cTbqwMpPCtuju+Uv6Ahs7peYRkAVbalJ82oP3651pinHJKgljhY76+35IJS2H5mr2biFTGFBX/lnvfSxbhM5kKvJWBuYX3VWEuXcNE3o86itswruLEV4krJcyU6TUr8KA+uPBVgkf0TFQyPW1t7c6UH4KLSmqP8AmcfO+qzj2Ex+FqFNCubLyXHkED4Yss2OnxLh2J6sxzEyHhE5UXHHUAvOgeYATtMcQ9K6nHdUtIBoga14HMURJkcdQMel0Wc6t18MZrJnnzykzmqOVNpg1f1AcPcE0ZkLzaFA34Kq04DoHEB2LOscIAuC+sbXPHkb6cdycz5qP80a1VNMpek5QZgmjHhp1Vi2PdlMEl+ezp9e/QLfHjo4Yge98EtkiaiXH1DKARkJlKFXQL9OKKovnQtNRcvJhCUGymgTXXaBomyk6U0DWak8AONj7DYwtnVfFlBZ10TgCd+0oNuLtni9k64xc13aI224i0Y3BDrgn62ycAvha8Ecmn5nWbkzSva8=
   file: "/usr/local/${DEPLOYMENT_ARCHIVE}"
+  skip_cleanup: true
   on:
     repo: bblacey/FreeCAD-MacOS-CI
     all_branches: true
