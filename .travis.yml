@@ -75,8 +75,8 @@ deploy:
     tags: true
 
 after_script:
-- curl -s --form-string "token=${PO_USER}" --form-string "user=${PO_USER}" --form-string "html=1" --form-string 
- "message=FreeCAD OS X build ${VSN} (${TAVIS_REPO_SLUG}#${TRAVIS_BUILD_NUMBER}) <b>${TRAVIS_TEST_RESULT}</b></p> 
+- curl -s --form-string "token=${PO_APP}" --form-string "user=${PO_USER}" --form-string "html=1" --form-string 
+ "message=FreeCAD OS X build ${VSN} <b>${TRAVIS_TEST_RESULT}</b> (${TAVIS_REPO_SLUG}#${TRAVIS_BUILD_NUMBER})</p> 
  <a href=\"https://api.travis-ci.org/jobs/${TRAVIS_JOB_ID}/log.txt?deansi=true\">Build Log</a>"
  https://api.pushover.net/1/messages.json
 
