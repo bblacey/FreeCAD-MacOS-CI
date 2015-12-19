@@ -12,14 +12,14 @@ before_install:
 - brew update
 - brew tap homebrew/science
 - brew tap sanelson/freecad
-- brew install eigen freetype qt homebrew/science/oce python boost-python pyside pyside-tools xerces-c orocos-kdl
+- brew install eigen freetype qt homebrew/science/oce python boost-python pyside pyside-tools xerces-c orocos-kdl libspnav
 - brew install --without-framework --without-soqt sanelson/freecad/coin
 - brew install --HEAD pivy
 - ### Install matplotlib from source
 - #git clone --depth 1 git://github.com/matplotlib/matplotlib.git
 - #pushd matplotlib && python setup.py install
 - #popd
-- #brew install homebrew/python/matplotlib
+- brew install homebrew/python/matplotlib
 - ### Install libarea from source
 - #git clone --depth 1 https://github.com/Heeks/libarea.git ./libarea
 - #pushd ./libarea && mkdir build && cd build
@@ -76,10 +76,10 @@ deploy:
     tags: true
 
 after_script:
-- if [ ${TRAVIS_TEST_RESULT} == 0 ]; then export MSG="PASSED"; else export MSG="FAILED"; fi
+- if [ ${TRAVIS_TEST_RESULT} == 0 ]; then export MSG="SUCCEEDED"; else export MSG="FAILED"; fi
 - curl -s --form-string "token=${PO_APP}" --form-string "user=${PO_USER}" --form-string "html=1" --form-string 
  "message=FreeCAD OS X build ${VSN} <b>${MSG}</b> (${TAVIS_REPO_SLUG}#${TRAVIS_BUILD_NUMBER})</b></p> 
- <a href=\"https://api.travis-ci.org/jobs/${TRAVIS_JOB_ID}/log.txt?deansi=true\">Build ${TRAVIS_BUILD_NUMBER} Log</a>"
+ <a href=\"https://api.travis-ci.org/jobs/${TRAVIS_JOB_ID}/log.txt?deansi=true\">Build #${TRAVIS_BUILD_NUMBER} Log</a></p><a href=\"https://github.com/bblacey/FreeCAD-MacOS-CI/releases/tag/${TRAVIS_COMMIT}\">Download build ${VSN} from GitHub</a>"
  https://api.pushover.net/1/messages.json
 
 notifications:
