@@ -46,7 +46,7 @@ deploy:
   provider: releases
   api_key:
     secure: DlnEwU6+O3vt2mAy0lvD5qhsw8p4yo3eIpH6xRqU5goKfUYXWLU7h/+C2MQsyof6mD2ZPrHH7PHgwBdif2lcIy3aRDc+F3ocSQBEQcjm+FEq/vLNb3QR5q+k/sLl0u+Va/TamU/KLlTIRpDelWL/9Ik5NaGR7nvxkFw6a8fAkS1cTbqwMpPCtuju+Uv6Ahs7peYRkAVbalJ82oP3651pinHJKgljhY76+35IJS2H5mr2biFTGFBX/lnvfSxbhM5kKvJWBuYX3VWEuXcNE3o86itswruLEV4krJcyU6TUr8KA+uPBVgkf0TFQyPW1t7c6UH4KLSmqP8AmcfO+qzj2Ex+FqFNCubLyXHkED4Yss2OnxLh2J6sxzEyHhE5UXHHUAvOgeYATtMcQ9K6nHdUtIBoga14HMURJkcdQMel0Wc6t18MZrJnnzykzmqOVNpg1f1AcPcE0ZkLzaFA34Kq04DoHEB2LOscIAuC+sbXPHkb6cdycz5qP80a1VNMpek5QZgmjHhp1Vi2PdlMEl+ezp9e/QLfHjo4Yge98EtkiaiXH1DKARkJlKFXQL9OKKovnQtNRcvJhCUGymgTXXaBomyk6U0DWak8AONj7DYwtnVfFlBZ10TgCd+0oNuLtni9k64xc13aI224i0Y3BDrgn62ycAvha8Ecmn5nWbkzSva8=
-  file: "/usr/local/${DEPLOYMENT_ARCHIVE}"
+  file: "${DEPLOYMENT_ARCHIVE}"
   on:
     repo: bblacey/FreeCAD-MacOS-CI
     all_branches: true
@@ -58,4 +58,4 @@ notifications:
       secure: SEwbkIvChyaUwuXhtXPIMISAlWPSHx5PQH/YkHZn83fnaOYCJRfkare6NIeBGm5ruxZmETeS1D9rHqohSBVXeGqgCp5VfGacZ0/d/spnq2gb+MqT2/fzbjB/RHpZWuxL4P7j7kTdqOq/jO35aQa+df512cwrmkA4ZWLnFR47EgvWdBjP73DMSes5cIR3rr6ftASYyVfI1IlUZsBgZFJf9KZ+Mb/VRCo6CvO5S08ZEdww0i5fzNx/H0DkxMul2TDH9mc+RFD8n+8Q/ihJhP84b8+XGwjQJwvNWqIFpNya3gaDzjidI8w3R8uekOBlRgK5IBpgyXQfY3BCmvyfurIeKoqGxSPUxz3jXdGfObCfCQ6H6oDFuBAfozx5aBlYSiaUdiZ7Y6RMUK3PyVBAiHNsjknRhWBIMvebp8nTQPvCRRFXwK2LRpwuVB9gh9fq9YATFjphSu9seX54U0mpX3DnfAAHb1BXnFm3IlU3V1KIAI53m9WGO4FSWbwafcrGTg4zIIH8RI8X7b0Z3Ay6DpYcwj8zUnajCJAgfil7dSMC+4fL/+b7KacqTv8YAHZkNTktjvh9pEzS+K9JkuLVMklt4J8L0hl68gy0/e1pfi6EBAeQHis6aG5XW7tF9dTI0kF/yrSfTFIHc0L+BRx2xQ7vbgWnyHsN+TUTXqgjRriXKrM=
     users:
       secure: hDFxK5UrjzSQoMoayjfFZU5q2ddJAymS2jIQWQedMGYlTnUilRtpZl4UuOHd59ZnDtcNVP86olUKgYJc/PaIyZZpOafyDyttkNmzV/09EapdSwM4AaTU04QxMNhle7nqCqigza0maDiKFM+LyZMXvsa91A85U2Y93kMtzh2m0yetHau7a97aKNK/B94uRKuNxdvZID+i/BA13OqJGz/JKiYt6S3yEowTSEzbx9plKxbLb3qaI5i3T7mx2CedbQPopMy5wILxCv1fhqyC2+JvH0scuTM54Y1AOJZr6JZo3nNys8fWFqoWUtBdBZcv+qRWljJBKXDGK0iYrh09CG4TXxv61MOqnNm2oQRPwJ3KeVs4dsMeyZI7V94gV5fnUOxgEu7a6ImzAiuQITaG6AWl4h1nURHGfKNJeJ+wgjkuCZLUEZV3vPnEpH87jpyXfzM7vVh/NdRN+/pPN9dKb8Q9QsizsgK1NW/o63g07RnOVMxxNKCe16foad6n7uf6vuIIufJrC2U+FtWklWqq7VJCp2znrBiUf5EEoiziIbcHn4B2kSmOEIn8YLqrf1vytUdYy0BY8IdO7qZ15nhQelDwHDAd3fK7J066GeXevSgJwZ20uYgYTdD2tOp8UuqjW3Le715hy/w96OWUUfUOw+Qyj6+q2ig78DbYcKlL4sKKHq0=
-    template: "%{repository}#%{build_number} - %{VSN} (%{branch} - %{commit}) : %{message} - Build Log: ${build_url}"
+    template: "%{repository}#%{build_number} - (%{branch} - %{commit}) : %{message} - Build Log: ${build_url}"
