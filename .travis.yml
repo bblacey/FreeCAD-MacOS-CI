@@ -59,8 +59,6 @@ after_success:
 - #cd /usr/local && zip -q -r -X "${DEPLOYMENT_ARCHIVE}.zip" FreeCAD.app -x FreeCAD.app/Contents/doc*
 - #tar -cz -C /usr/local --exclude '*/doc/*' -f "${DEPLOYMENT_ARCHIVE}" FreeCAD.app
 - cd /usr/local && zip -q -r -X "${DEPLOYMENT_ARCHIVE}" FreeCAD.app -x FreeCAD.app/Contents/doc\*
-- ls -l
-- ls -l /usr/local
 - travis_retry curl --ftp-create-dirs -T ${DEPLOYMENT_ARCHIVE} -u ${FTP_USER}:${FTP_PASSWORD} ftp://${FTP_HOST}/${DEPLOYMENT_ARCHIVE}
 
 deploy:
@@ -82,13 +80,6 @@ after_script:
   <a href=\"https://github.com/bblacey/FreeCAD-MacOS-CI/releases/tag/${TRAVIS_COMMIT}\">Download build ${VSN} from GitHub</a>"
   https://api.pushover.net/1/messages.json
 
-notifications:
-  pushover:
-    api_key:
-      secure: SEwbkIvChyaUwuXhtXPIMISAlWPSHx5PQH/YkHZn83fnaOYCJRfkare6NIeBGm5ruxZmETeS1D9rHqohSBVXeGqgCp5VfGacZ0/d/spnq2gb+MqT2/fzbjB/RHpZWuxL4P7j7kTdqOq/jO35aQa+df512cwrmkA4ZWLnFR47EgvWdBjP73DMSes5cIR3rr6ftASYyVfI1IlUZsBgZFJf9KZ+Mb/VRCo6CvO5S08ZEdww0i5fzNx/H0DkxMul2TDH9mc+RFD8n+8Q/ihJhP84b8+XGwjQJwvNWqIFpNya3gaDzjidI8w3R8uekOBlRgK5IBpgyXQfY3BCmvyfurIeKoqGxSPUxz3jXdGfObCfCQ6H6oDFuBAfozx5aBlYSiaUdiZ7Y6RMUK3PyVBAiHNsjknRhWBIMvebp8nTQPvCRRFXwK2LRpwuVB9gh9fq9YATFjphSu9seX54U0mpX3DnfAAHb1BXnFm3IlU3V1KIAI53m9WGO4FSWbwafcrGTg4zIIH8RI8X7b0Z3Ay6DpYcwj8zUnajCJAgfil7dSMC+4fL/+b7KacqTv8YAHZkNTktjvh9pEzS+K9JkuLVMklt4J8L0hl68gy0/e1pfi6EBAeQHis6aG5XW7tF9dTI0kF/yrSfTFIHc0L+BRx2xQ7vbgWnyHsN+TUTXqgjRriXKrM=
-    users:
-      secure: hDFxK5UrjzSQoMoayjfFZU5q2ddJAymS2jIQWQedMGYlTnUilRtpZl4UuOHd59ZnDtcNVP86olUKgYJc/PaIyZZpOafyDyttkNmzV/09EapdSwM4AaTU04QxMNhle7nqCqigza0maDiKFM+LyZMXvsa91A85U2Y93kMtzh2m0yetHau7a97aKNK/B94uRKuNxdvZID+i/BA13OqJGz/JKiYt6S3yEowTSEzbx9plKxbLb3qaI5i3T7mx2CedbQPopMy5wILxCv1fhqyC2+JvH0scuTM54Y1AOJZr6JZo3nNys8fWFqoWUtBdBZcv+qRWljJBKXDGK0iYrh09CG4TXxv61MOqnNm2oQRPwJ3KeVs4dsMeyZI7V94gV5fnUOxgEu7a6ImzAiuQITaG6AWl4h1nURHGfKNJeJ+wgjkuCZLUEZV3vPnEpH87jpyXfzM7vVh/NdRN+/pPN9dKb8Q9QsizsgK1NW/o63g07RnOVMxxNKCe16foad6n7uf6vuIIufJrC2U+FtWklWqq7VJCp2znrBiUf5EEoiziIbcHn4B2kSmOEIn8YLqrf1vytUdYy0BY8IdO7qZ15nhQelDwHDAd3fK7J066GeXevSgJwZ20uYgYTdD2tOp8UuqjW3Le715hy/w96OWUUfUOw+Qyj6+q2ig78DbYcKlL4sKKHq0=
-    template: "%{repository}#%{build_number} - %{VSN} (%{branch} - %{commit}) : %{message} - <a href=${build_url}>Build Log</a>"
 env:
   global:
   - secure: RAAE+6cnvVI1ZDX1it8K+VuwcC6Lt0SKy9XWCpyXcRZxoFe8QkJSPBJfJGSnri0tAc/vmxOG0WmahibxpT4RFyu4cEMyaXr/P22sRCrW/CYvr+drZF/QHNLx9XndUy4PnWBih6ZJXlEUiszMlM9/pCIt8Ig+cFDSCclQgMCO2rqtUn03m9/EHTX2a1ct2eOPNlFgTPc/pJ1Vld7VBEUCz+de+U3yEyFAQtZO0qmuSobqkyDmEDXXff5JTsMcxl+Hm8RMYVKuUr7iatQgY7ywOMCpw/4qaSQOcNi86jEeewQiqmqneg1II69/Ory5NwxsS7hbHbYm2KADM5JHIoBaNvg9W5SZYz0rzbdm1rcktuEfBaqr/6r4m8i54dIzyJvn66b4IxE5ELzCZLxg5Wb+kM29H7KYeytEoOR+Bge0Vvg6E1QP6huQ9zPKR0+oaepFL6Vp31fRZc1mwMTKXMPCggHrR0e4nsi/oJEkqDGvAna6QqekkgNQtAT0+9TP3s7IcQvEu0V2iGhR4qG149mFYMI3dh7Dfd990lY1acJTdjS4/nSjGtaRluDlWXXQw9+W5CBSA/DTI1RWpytUQ6M0wSymbJokr0aR9HACmxjh8LJZK/ZSjYU+7i71oGMjiCve7gMCSI7UQ1KEIbm2UXhhNyKrMVGc2iqRtOgUt7JT1ac=
