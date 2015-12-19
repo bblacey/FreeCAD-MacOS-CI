@@ -1,4 +1,4 @@
-sudo: false
+sudo: disabled
 language: cpp
 
 os:
@@ -28,7 +28,7 @@ script:
 - sleep 10 && pkill FreeCAD
 - cat /tmp/FreeCAD.log
 - grep --file=../.log_errors /tmp/FreeCAD.log ; [ $? == 1 ] && echo "No errors from .log_errors file found in the log after start from build directory" || ( echo "Error from .log_errors found!" && false )
-- sudo make install/fast
+- make install/fast
 - /usr/local/FreeCAD.app/Contents/bin/FreeCAD --run-test 0
 - /usr/local/FreeCAD.app/Contents/bin/FreeCAD --log-file /tmp/FreeCAD_installed.log &
 - sleep 10 && pkill FreeCAD
@@ -36,7 +36,9 @@ script:
 - grep --file=../.log_errors /tmp/FreeCAD_installed.log ; [ $? == 1 ] && echo "No errors from .log_errors file found in the log after start from /usr/local/bin" || ( echo "Error from .log_errors found!" && false )
 
 before_deploy:
-- export VSN=$(sed -E -n -e 's/(^#define FCRevision.*")([0-9]+)(.*Git.*$)/\2/p' ${TRAVIS_BUILD_DIR}/build/src/Build/Version.h)-${TRAVIS_COMMIT:0:7}
+- export MASTER_COMMIT=$(git ls-remote origin | grep 'refs/heads/master' | cut -f1)
+- #export VSN=$(sed -E -n -e 's/(^#define FCRevision.*")([0-9]+)(.*Git.*$)/\2/p' ${TRAVIS_BUILD_DIR}/build/src/Build/Version.h)-${TRAVIS_COMMIT:0:7}
+- export VSN=$(sed -E -n -e 's/(^#define FCRevision.*")([0-9]+)(.*Git.*$)/\2/p' ${TRAVIS_BUILD_DIR}/build/src/Build/Version.h)-${MASTER_COMMIT:0:7}
 - echo "Version = $VSN"
 - export DEPLOYMENT_ARCHIVE="FreeCAD_osx-${VSN}.zip"
 - cd /usr/local && zip -q -r -X "${DEPLOYMENT_ARCHIVE}" FreeCAD.app -x FreeCAD.app/Contents/doc\*
@@ -52,10 +54,16 @@ deploy:
     all_branches: true
     tags: true
 
-notifications:
-  pushover:
-    api_key:
-      secure: SEwbkIvChyaUwuXhtXPIMISAlWPSHx5PQH/YkHZn83fnaOYCJRfkare6NIeBGm5ruxZmETeS1D9rHqohSBVXeGqgCp5VfGacZ0/d/spnq2gb+MqT2/fzbjB/RHpZWuxL4P7j7kTdqOq/jO35aQa+df512cwrmkA4ZWLnFR47EgvWdBjP73DMSes5cIR3rr6ftASYyVfI1IlUZsBgZFJf9KZ+Mb/VRCo6CvO5S08ZEdww0i5fzNx/H0DkxMul2TDH9mc+RFD8n+8Q/ihJhP84b8+XGwjQJwvNWqIFpNya3gaDzjidI8w3R8uekOBlRgK5IBpgyXQfY3BCmvyfurIeKoqGxSPUxz3jXdGfObCfCQ6H6oDFuBAfozx5aBlYSiaUdiZ7Y6RMUK3PyVBAiHNsjknRhWBIMvebp8nTQPvCRRFXwK2LRpwuVB9gh9fq9YATFjphSu9seX54U0mpX3DnfAAHb1BXnFm3IlU3V1KIAI53m9WGO4FSWbwafcrGTg4zIIH8RI8X7b0Z3Ay6DpYcwj8zUnajCJAgfil7dSMC+4fL/+b7KacqTv8YAHZkNTktjvh9pEzS+K9JkuLVMklt4J8L0hl68gy0/e1pfi6EBAeQHis6aG5XW7tF9dTI0kF/yrSfTFIHc0L+BRx2xQ7vbgWnyHsN+TUTXqgjRriXKrM=
-    users:
-      secure: hDFxK5UrjzSQoMoayjfFZU5q2ddJAymS2jIQWQedMGYlTnUilRtpZl4UuOHd59ZnDtcNVP86olUKgYJc/PaIyZZpOafyDyttkNmzV/09EapdSwM4AaTU04QxMNhle7nqCqigza0maDiKFM+LyZMXvsa91A85U2Y93kMtzh2m0yetHau7a97aKNK/B94uRKuNxdvZID+i/BA13OqJGz/JKiYt6S3yEowTSEzbx9plKxbLb3qaI5i3T7mx2CedbQPopMy5wILxCv1fhqyC2+JvH0scuTM54Y1AOJZr6JZo3nNys8fWFqoWUtBdBZcv+qRWljJBKXDGK0iYrh09CG4TXxv61MOqnNm2oQRPwJ3KeVs4dsMeyZI7V94gV5fnUOxgEu7a6ImzAiuQITaG6AWl4h1nURHGfKNJeJ+wgjkuCZLUEZV3vPnEpH87jpyXfzM7vVh/NdRN+/pPN9dKb8Q9QsizsgK1NW/o63g07RnOVMxxNKCe16foad6n7uf6vuIIufJrC2U+FtWklWqq7VJCp2znrBiUf5EEoiziIbcHn4B2kSmOEIn8YLqrf1vytUdYy0BY8IdO7qZ15nhQelDwHDAd3fK7J066GeXevSgJwZ20uYgYTdD2tOp8UuqjW3Le715hy/w96OWUUfUOw+Qyj6+q2ig78DbYcKlL4sKKHq0=
-    template: "%{repository}#%{build_number} - (%{branch} - %{commit}) : %{message} - Build Log: ${build_url}"
+after_script:
+- if [ ${TRAVIS_TEST_RESULT} == 0 ]; then export MSG="SUCCEEDED"; else export MSG="FAILED"; fi
+- curl -s --form-string "token=${PO_APP}" --form-string "user=${PO_USER}" --form-string "html=1" --form-string 
+  "message=FreeCAD OS X build ${VSN} <b>${MSG}</b> (${TAVIS_REPO_SLUG}#${TRAVIS_BUILD_NUMBER})</b><br> 
+  <a href=\"https://api.travis-ci.org/jobs/${TRAVIS_JOB_ID}/log.txt?deansi=true\">Build ${TRAVIS_BUILD_NUMBER} Log</a><br>
+  <a href=\"https://github.com/bblacey/FreeCAD-MacOS-CI/releases/tag/${TRAVIS_COMMIT}\">Download build ${VSN} from GitHub</a>"
+  https://api.pushover.net/1/messages.json
+
+env:
+  global:
+  - secure: exhWNlrsAbxghGG9cVblAVtJAPP9ZvlHflap9mBGgl0D3nSXDMtNESYHsIDI5v22Pl02SORTtQNc308ttk/7dFRJXr8DKKBfDvPkXV/j9KnA+TOu3dOQuqHMR2TRsFyfDeyLMCOazlYZMfryZCsf8EuUnF3TNLeHXcPxDveJPZ5vEnuveJcZmr57g+pS8POJnuM5X6VzrrmA4PGVKzwnWztNGoETi4iES9/61bB35jnllNdBi0R63QmbTzLvrSLCjPxOwjeymQbpqnxDDYOuXUPdtU5RrjvX1jzFCHbaJWtHvi45t26ufX7e1ob4tplFoX14fRzrQYiE2557x7AN18UJsIOrQ30OO+W78rk8feUamsVNyOeo6jnHoi4AeUPShoZ3dt42Z5dQ20rWoD0amqapIry7EORzrUIsgUHRATIypa/kVYlf2pVmQ930LelWlEtiLHPXuviaWeSPmipXkQi0mZY96X3C/fy+LzrpNrQJsK0ucUlM46SVUUWOHtO+OK8WyT7OiQaGsAa3OhRVaql21gM/X8uA9P0OB/Rdag3SEkZlpNjAn6qcqNgopGDGfEOyqC4f17YDeHQGWad12tygC/y29el3Xzi5Rm9J9zeMdJ7K+EPSqhwqnbeos8pSDCBeY2XHF0fzjih1BABNxopSVDdk4+Opl7zWBRHmxm8=
+  - secure: egFL2wg8DAhkl7MzyU/hrx3J/pwsvoOfz4CWDP5UJnzNkeXAma9Wpdk1+0UtOzlwKZ0tziKe1+6JpHAcHTgLY/SR4XUs0+7Jkc+igQOsa6OmxFfcnUSfxU/mhtpzfNIdq+cxNGN0vYuvK3KAfkE07qdbUF/ZJmhlFqVa1kRBpci2KYxcF0599aeWmcQpoLePHWUuujlbYEiLHF5rrhZeeWULafiNlW97RWynurpgjM/Om7r9BUd6BUR9xQhBQ5FzsN5PASSdjZjD2qjMLnbCF8k71CO1HkvA9PN8VWK3FEddsgA32livf+zE9RvlbDaZq2QmXgSVPMy5Hmi5Q2SiBn3s+f1hoLnXj/vJdA/vnIJzO1F8mN2Ykd0H8/aINVWr2nM3FglGTrD1bv3It1yqA/EKH1vZbQTEp/goV1ehjg49U8+WD3a5UVr6nh3trec69nqN+XlYGTTQoQa58JNy/uticZiytQgG3w+V7vCzmgVL6m+ZCvLLjZ79S5Ebh9JNNYX9DMkEVPQrPPpwpyTa5EAEZkgzHbktpVEVacfITIRhbtKJXKJ1mhmEnVTN4Wp1BQUoQEVTx685ih/wXvphtmBj1Pr0d2mxVA++1g7v8HKAxLalQ9wJ9Ss7YnCMEvShaAMc/Me6RGTuwhpDcUS5hQCOU9aTupT5yVottNDEBMs=
+
