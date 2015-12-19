@@ -51,7 +51,9 @@ script:
 - grep --file=../.log_errors /tmp/FreeCAD_installed.log ; [ $? == 1 ] && echo "No errors from .log_errors file found in the log after start from /usr/local/bin" || ( echo "Error from .log_errors found!" && false )
 
 after_success:
-- export VSN=$(sed -E -n -e 's/(^#define FCRevision.*")([0-9]+)(.*Git.*$)/\2/p' ${TRAVIS_BUILD_DIR}/build/src/Build/Version.h)-${TRAVIS_COMMIT:0:7}
+- export MASTER_COMMIT=$(git ls-remote origin | grep 'refs/heads/master' | cut -f1)
+- #export VSN=$(sed -E -n -e 's/(^#define FCRevision.*")([0-9]+)(.*Git.*$)/\2/p' ${TRAVIS_BUILD_DIR}/build/src/Build/Version.h)-${TRAVIS_COMMIT:0:7}
+- export VSN=$(sed -E -n -e 's/(^#define FCRevision.*")([0-9]+)(.*Git.*$)/\2/p' ${TRAVIS_BUILD_DIR}/build/src/Build/Version.h)-${MASTER_COMMIT:0:7}
 - echo "Version = $VSN"
 - export DEPLOYMENT_ARCHIVE="FreeCAD_osx-${VSN}.zip"
 - echo $(git rev-parse master)
@@ -75,8 +77,8 @@ deploy:
 after_script:
 - if [ ${TRAVIS_TEST_RESULT} == 0 ]; then export MSG="SUCCEEDED"; else export MSG="FAILED"; fi
 - curl -s --form-string "token=${PO_APP}" --form-string "user=${PO_USER}" --form-string "html=1" --form-string 
-  "message=FreeCAD OS X build ${VSN} <b>${MSG}</b> (${TAVIS_REPO_SLUG}#${TRAVIS_BUILD_NUMBER})</b></p> 
-  <a href=\"https://api.travis-ci.org/jobs/${TRAVIS_JOB_ID}/log.txt?deansi=true\">Build \#${TRAVIS_BUILD_NUMBER} Log</a></p>
+  "message=FreeCAD OS X build ${VSN} <b>${MSG}</b> (${TAVIS_REPO_SLUG}#${TRAVIS_BUILD_NUMBER})</b><br> 
+  <a href=\"https://api.travis-ci.org/jobs/${TRAVIS_JOB_ID}/log.txt?deansi=true\">Build ${TRAVIS_BUILD_NUMBER} Log</a><br>
   <a href=\"https://github.com/bblacey/FreeCAD-MacOS-CI/releases/tag/${TRAVIS_COMMIT}\">Download build ${VSN} from GitHub</a>"
   https://api.pushover.net/1/messages.json
 
