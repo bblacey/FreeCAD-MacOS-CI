@@ -15,10 +15,10 @@ before_install:
 - brew install --without-framework --without-soqt sanelson/freecad/coin
 - brew install --HEAD pivy
 - ### Install matplotlib from source
-- git clone --depth 1 git://github.com/matplotlib/matplotlib.git
-- pushd matplotlib && python setup.py install
-- popd
-- #pip install matplotlib
+- #git clone --depth 1 git://github.com/matplotlib/matplotlib.git
+- #pushd matplotlib && python setup.py install
+- #popd
+- pip install matplotlib
 - #brew install homebrew/python/matplotlib
 - #cmake -DCMAKE_INSTALL_PREFIX:PATH=/usr -DPYTHON_DIR=$(python-config --exec-prefix)/bin/ -DPython_FRAMEWORKS=$(python-config --exec-prefix)/bin ../
 - #cmake —DCMAKE_INSTALL_PREFIX:PATH=$(brew --prefix)/usr -DPYTHON_DIR=$(python-config --exec-prefix)/bin/ -DBoost_INCLUDE_DIR:PATH=$(brew --prefix)/include -DPython_FRAMEWORKS:PATH=$(python-config --prefix) ../
