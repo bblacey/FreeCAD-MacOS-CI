@@ -12,7 +12,7 @@ before_install:
 - brew update
 - brew tap homebrew/science
 - brew tap sanelson/freecad
-- brew install eigen freetype qt homebrew/science/oce python boost-python pyside pyside-tools xerces-c orocos-kdl libspnav
+- brew install eigen freetype qt homebrew/science/oce python boost-python pyside pyside-tools xerces-c orocos-kdl 
 - brew install --without-framework --without-soqt sanelson/freecad/coin
 - brew install --HEAD pivy
 - brew install homebrew/python/matplotlib
@@ -59,7 +59,7 @@ deploy:
 after_script:
 - if [ ${TRAVIS_TEST_RESULT} == 0 ]; then export MSG="SUCCEEDED"; else export MSG="FAILED"; fi
 - curl -s --form-string "token=${PO_APP}" --form-string "user=${PO_GROUP}" --form-string "html=1" --form-string 
-  "message=FreeCAD OS X build ${VSN} <b>${MSG}</b> (${TAVIS_REPO_SLUG}${TRAVIS_BRANCH}#${TRAVIS_BUILD_NUMBER})</b><br> 
+  "message=FreeCAD OS X build ${VSN} <b>${MSG}</b> (${TAVIS_REPO_SLUG}/${TRAVIS_BRANCH}#${TRAVIS_BUILD_NUMBER})</b><br> 
   <a href=\"https://api.travis-ci.org/jobs/${TRAVIS_JOB_ID}/log.txt?deansi=true\">Build ${TRAVIS_BUILD_NUMBER} Log</a><br>
   <a href=\"https://github.com/bblacey/FreeCAD-MacOS-CI/releases/tag/${TRAVIS_COMMIT}\">Download build ${VSN} from GitHub</a>"
   https://api.pushover.net/1/messages.json
