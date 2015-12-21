@@ -18,10 +18,9 @@ before_install:
 - #git clone --depth 1 git://github.com/matplotlib/matplotlib.git
 - #pushd matplotlib && python setup.py install
 - #popd
-- brew install homebrew/python/matplotlib
-- ### Install libarea from source
-- #git clone --depth 1 https://github.com/Heeks/libarea.git ./libarea
-- #pushd ./libarea && mkdir build && cd build
+- #brew install homebrew/python/matplotlib
+- pip update
+- pip install matplotlib
 - #cmake -DCMAKE_INSTALL_PREFIX:PATH=/usr -DPYTHON_DIR=$(python-config --exec-prefix)/bin/ -DPython_FRAMEWORKS=$(python-config --exec-prefix)/bin ../
 - #cmake —DCMAKE_INSTALL_PREFIX:PATH=$(brew --prefix)/usr -DPYTHON_DIR=$(python-config --exec-prefix)/bin/ -DBoost_INCLUDE_DIR:PATH=$(brew --prefix)/include -DPython_FRAMEWORKS:PATH=$(python-config --prefix) ../
 - #cmake —DCMAKE_INSTALL_PREFIX:PATH=$(brew --prefix)/usr -DPYTHON_DIR=$(python-config --exec-prefix)/bin/ -DBoost_INCLUDE_DIR:PATH=$(brew --prefix)/include -DPython_FRAMEWORKS:PATH=$(python-config --prefix) -DPYTHON_FRAMEWORK_INCLUDES:PATH=$(python-config --prefix)/include ../
