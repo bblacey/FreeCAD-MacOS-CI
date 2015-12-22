@@ -41,13 +41,15 @@ script:
 - sleep 10 && pkill FreeCAD
 - cat /tmp/FreeCAD.log
 - grep --file=../.log_errors /tmp/FreeCAD.log ; [ $? == 1 ] && echo "No errors from .log_errors file found in the log after start from build directory" || ( echo "Error from .log_errors found!" && false )
-- PYTHONPATH=$(pwd)/lib/ python -c "import sys, unittest, FreeCAD, Plot; Plot.figure("TrigonometricTest");"
 - sudo make -j2 install
 - /usr/local/FreeCAD.app/Contents/bin/FreeCAD --run-test 0
 - /usr/local/FreeCAD.app/Contents/bin/FreeCAD --log-file /tmp/FreeCAD_installed.log &
 - sleep 10 && pkill FreeCAD
 - cat /tmp/FreeCAD_installed.log
 - grep --file=../.log_errors /tmp/FreeCAD_installed.log ; [ $? == 1 ] && echo "No errors from .log_errors file found in the log after start from /usr/local/bin" || ( echo "Error from .log_errors found!" && false )
+- pushd /usr/local/FreeCAD.app/Contents
+- PYTHONPATH=$(pwd)/lib/ python -c "import sys, unittest, FreeCAD, Plot; Plot.figure("TrigonometricTest");"
+- popd
 
 after_success:
 - export MASTER_COMMIT=$(git ls-remote origin | grep 'refs/heads/master' | cut -f1)
