@@ -15,7 +15,7 @@ before_install:
 - brew install --without-framework --without-soqt sanelson/freecad/coin
 - brew install --HEAD pivy
 - #brew install homebrew/python/matplotlib
-- pip install matplotlib==1.4.3
+- pip install matplotlib
 - ### Install matplotlib from source
 - #git clone --depth 1 git://github.com/matplotlib/matplotlib.git
 - #pushd matplotlib && python setup.py install
