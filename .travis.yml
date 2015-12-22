@@ -18,7 +18,7 @@ before_install:
 - #git clone --depth 1 git://github.com/matplotlib/matplotlib.git
 - #pushd matplotlib && python setup.py install
 - #popd
-- pip install matplotlib==1.4.3
+- pip install --install-option="--prefix=$(brew --prefix)" matplotlib==1.4.3
 - #brew install homebrew/python/matplotlib
 - #cmake -DCMAKE_INSTALL_PREFIX:PATH=/usr -DPYTHON_DIR=$(python-config --exec-prefix)/bin/ -DPython_FRAMEWORKS=$(python-config --exec-prefix)/bin ../
 - #cmake —DCMAKE_INSTALL_PREFIX:PATH=$(brew --prefix)/usr -DPYTHON_DIR=$(python-config --exec-prefix)/bin/ -DBoost_INCLUDE_DIR:PATH=$(brew --prefix)/include -DPython_FRAMEWORKS:PATH=$(python-config --prefix) ../
