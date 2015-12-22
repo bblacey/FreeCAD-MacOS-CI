@@ -14,21 +14,14 @@ before_install:
 - brew install eigen freetype qt homebrew/science/oce python boost-python pyside pyside-tools xerces-c orocos-kdl
 - brew install --without-framework --without-soqt sanelson/freecad/coin
 - brew install --HEAD pivy
-- ### Install matplotlib from source
-- #git clone --depth 1 git://github.com/matplotlib/matplotlib.git
-- #pushd matplotlib && python setup.py install
-- #popd
-- pip install --install-option="--prefix=$(brew --prefix)" matplotlib==1.4.3
 - #brew install homebrew/python/matplotlib
-- #cmake -DCMAKE_INSTALL_PREFIX:PATH=/usr -DPYTHON_DIR=$(python-config --exec-prefix)/bin/ -DPython_FRAMEWORKS=$(python-config --exec-prefix)/bin ../
-- #cmake —DCMAKE_INSTALL_PREFIX:PATH=$(brew --prefix)/usr -DPYTHON_DIR=$(python-config --exec-prefix)/bin/ -DBoost_INCLUDE_DIR:PATH=$(brew --prefix)/include -DPython_FRAMEWORKS:PATH=$(python-config --prefix) ../
-- #cmake —DCMAKE_INSTALL_PREFIX:PATH=$(brew --prefix)/usr -DPYTHON_DIR=$(python-config --exec-prefix)/bin/ -DBoost_INCLUDE_DIR:PATH=$(brew --prefix)/include -DPython_FRAMEWORKS:PATH=$(python-config --prefix) -DPYTHON_FRAMEWORK_INCLUDES:PATH=$(python-config --prefix)/include ../
-- #make -j2 install
-- #popd
+- #pip install --install-option="--prefix=$(brew --prefix)" matplotlib==1.4.3
+- ### Install matplotlib from source
+- git clone --depth 1 git://github.com/matplotlib/matplotlib.git
+- pushd matplotlib && python setup.py install
+- make -j2 install
+- popd
 - if [ -e /usr/local/lib/libgdal.1.dylib ]; then brew unlink gdal; fi
-- brew list
-- brew info freetype
-- #find -x /usr/lib -name '*freetype*' -exec ls -l {} \;
 
 install:
 - #mkdir build && cd build && cmake -DFREECAD_USE_EXTERNAL_KDL=ON -DFREECAD_CREATE_MAC_APP=ON -DCMAKE_BUILD_TYPE=Debug ../
@@ -47,9 +40,9 @@ script:
 - sleep 10 && pkill FreeCAD
 - cat /tmp/FreeCAD_installed.log
 - grep --file=../.log_errors /tmp/FreeCAD_installed.log ; [ $? == 1 ] && echo "No errors from .log_errors file found in the log after start from /usr/local/bin" || ( echo "Error from .log_errors found!" && false )
-- pushd /usr/local/FreeCAD.app/Contents
-- PYTHONPATH=$(pwd)/lib/ python -c "import sys, unittest, FreeCAD, Plot; Plot.figure("TrigonometricTest");"
-- popd
+- #pushd /usr/local/FreeCAD.app/Contents
+- #PYTHONPATH=$(pwd)/lib/ python -c "import sys, unittest, FreeCAD, Plot; Plot.figure("TrigonometricTest");"
+- #popd
 
 after_success:
 - export MASTER_COMMIT=$(git ls-remote origin | grep 'refs/heads/master' | cut -f1)
