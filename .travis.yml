@@ -15,7 +15,7 @@ before_install:
 - brew install eigen freetype qt homebrew/science/oce python boost-python pyside pyside-tools xerces-c orocos-kdl 
 - brew install --without-framework --without-soqt sanelson/freecad/coin
 - brew install --HEAD pivy
-- brew install homebrew/python/matplotlib
+- pip install matplotlib==1.4.3
 - if [ -e /usr/local/lib/libgdal.1.dylib ]; then brew unlink gdal; fi
 
 install:
