@@ -14,8 +14,9 @@ before_install:
 - brew install eigen freetype qt homebrew/science/oce python boost-python pyside pyside-tools xerces-c orocos-kdl
 - brew install --without-framework --without-soqt sanelson/freecad/coin
 - brew install --HEAD pivy
-- #brew install homebrew/python/matplotlib
-- pip install matplotlib
+- pip install six py-dateutil mock nose pyparsing pytz
+- brew install homebrew/python/matplotlib --with-pyside
+- #pip install matplotlib
 - ### Install matplotlib from source
 - #git clone --depth 1 git://github.com/matplotlib/matplotlib.git
 - #pushd matplotlib && python setup.py install
@@ -25,7 +26,7 @@ before_install:
 
 install:
 - #mkdir build && cd build && cmake -DFREECAD_USE_EXTERNAL_KDL=ON -DFREECAD_CREATE_MAC_APP=ON -DCMAKE_BUILD_TYPE=Debug ../
-- mkdir build && cd build && cmake -DFREECAD_USE_EXTERNAL_KDL=ON -DFREECAD_CREATE_MAC_APP=ON -DCMAKE_BUILD_TYPE=Release ../
+- mkdir build && cd build && cmake -DFREECAD_USE_EXTERNAL_KDL=ON -DFREECAD_CREATE_MAC_APP=ON -DCMAKE_BUILD_TYPE=Release -D_OCC64 -DOCC64 ../
 
 script:
 - make -j2
