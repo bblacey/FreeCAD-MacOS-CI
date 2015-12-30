@@ -33,7 +33,7 @@
 #include "PointsPy.h"
 #include "Properties.h"
 #include "PropertyPointKernel.h"
-#include "FeaturePointsImportAscii.h"
+#include "ViewFeature.h"
 
 
 /* registration table  */
@@ -62,8 +62,7 @@ void PointsExport initPoints()
     // add data types
     Points::Feature               ::init();
     Points::FeaturePython         ::init();
-    Points::Export                ::init();
-    Points::ImportAscii           ::init();
+    Points::ViewFeature           ::init();
 }
 
 } // extern "C"
