@@ -26,10 +26,14 @@ before_install:
 
 install:
 - #mkdir build && cd build && cmake -DFREECAD_USE_EXTERNAL_KDL=ON -DFREECAD_CREATE_MAC_APP=ON -DCMAKE_BUILD_TYPE=Debug ../
-- mkdir build && cd build && cmake -DFREECAD_USE_EXTERNAL_KDL=ON -DFREECAD_CREATE_MAC_APP=ON -DCMAKE_BUILD_TYPE=Release -D_OCC64=ON -DOCC64=ON ../
+- mkdir build && cd build && cmake -DFREECAD_USE_EXTERNAL_KDL=ON -DFREECAD_CREATE_MAC_APP=ON -DCMAKE_BUILD_TYPE=Release ../
 
 script:
 - make -j2
+- export DYLD_PRINT_ENV=TRUE
+- export DYLD_PRINT_LIBRARIES_POST_LAUNCH=TRUE
+- export DYLD_PRINT_OPTS=TRUE
+- export DYLD_PRINT_RPATHS=TRUE
 - bin/FreeCAD --run-test 0
 - bin/FreeCAD --log-file /tmp/FreeCAD.log &
 - sleep 10 && pkill FreeCAD
