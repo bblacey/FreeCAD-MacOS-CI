@@ -11,7 +11,9 @@ before_install:
 - brew update
 - brew tap homebrew/science
 - brew tap sanelson/freecad
-- brew install eigen freetype qt homebrew/science/oce python boost-python pyside pyside-tools xerces-c orocos-kdl
+#- brew install eigen freetype qt homebrew/science/oce python boost-python pyside pyside-tools xerces-c orocos-kdl
+- brew install eigen freetype qt python boost-python pyside pyside-tools xerces-c orocos-kdl
+- brew install opencascade --without-extras --without-gl2ps
 - brew install --without-framework --without-soqt sanelson/freecad/coin
 - brew install --HEAD pivy
 - pip install six py-dateutil mock nose pyparsing pytz
