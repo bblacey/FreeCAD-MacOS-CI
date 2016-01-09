@@ -17,6 +17,8 @@ before_install:
 - brew install --without-framework --without-soqt sanelson/freecad/coin
 - brew install --HEAD pivy
 - pip install six py-dateutil mock nose pyparsing pytz #numpy
+- brew tap homebrew/python
+- git checkout 1c4325b7c3efaa599552a23cb6b0e76d0ca0c3ab /usr/local/Library/Taps/homebrew/homebrew-python/matplotlib.rb
 - brew install --verbose --debug homebrew/python/matplotlib --with-pyside
 - #pip install matplotlib
 - ### Install matplotlib from source
