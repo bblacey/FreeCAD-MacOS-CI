@@ -16,6 +16,8 @@ before_install:
 #- travis_wait brew install opencascade --without-extras --without-gl2ps
 - brew install --without-framework --without-soqt sanelson/freecad/coin
 - brew install --HEAD pivy
+- pip install -U pip
+- pip install -U setuptools
 - pip install six py-dateutil mock nose pyparsing pytz numpy
 - brew install homebrew/python/matplotlib --with-pyside
 - #pip install matplotlib
