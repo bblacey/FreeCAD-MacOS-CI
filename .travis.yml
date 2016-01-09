@@ -16,10 +16,8 @@ before_install:
 #- travis_wait brew install opencascade --without-extras --without-gl2ps
 - brew install --without-framework --without-soqt sanelson/freecad/coin
 - brew install --HEAD pivy
-- pip install -U pip
-- pip install -U setuptools
 - pip install six py-dateutil mock nose pyparsing pytz #numpy
-- brew install homebrew/python/matplotlib --with-pyside
+- brew install --verbose --debug homebrew/python/matplotlib --with-pyside
 - #pip install matplotlib
 - ### Install matplotlib from source
 - #git clone --depth 1 git://github.com/matplotlib/matplotlib.git
@@ -27,6 +25,11 @@ before_install:
 - #make -j2 install
 - #popd
 - if [ -e /usr/local/lib/libgdal.1.dylib ]; then brew unlink gdal; fi
+# Installed 3DConnexion frameworks
+- curl -o /tmp/3dFW.dmg -L 'http://www.3dconnexion.com/index.php?eID=sdl&ext=tx_iccsoftware&oid=a273bdbc-c289-e10d-816b-567043331c9e&filename=3DxWareMac_v10-2-5_r2142.dmg'
+- hdiutil mount /tmp/3dFW.dmg
+- sudo installer -package /Volumes/3Dconnexion\ Software/Install\ 3Dconnexion\ software.pkg -target /
+
 
 install:
 - #mkdir build && cd build && cmake -DFREECAD_USE_EXTERNAL_KDL=ON -DFREECAD_CREATE_MAC_APP=ON -DCMAKE_BUILD_TYPE=Debug ../
