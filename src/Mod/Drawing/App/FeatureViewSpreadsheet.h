@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (c) Juergen Riegel         <juergen.riegel@web.de>          *
+ *   Copyright (c) Yorik van Havre          (yorik@uncreated.net 2015)     *
  *                                                                         *
  *   This file is part of the FreeCAD CAx development system.              *
  *                                                                         *
@@ -21,39 +21,48 @@
  ***************************************************************************/
 
 
-#ifndef FEATURE_Points_IMPORT_Ascii_H
-#define FEATURE_Points_IMPORT_Ascii_H
-
-#include "PointsFeature.h"
-
-#include <App/PropertyStandard.h>
+#ifndef _FeatureViewSpreadsheet_h_
+#define _FeatureViewSpreadsheet_h_
 
 
-namespace Points
+#include <App/DocumentObject.h>
+#include <App/PropertyLinks.h>
+#include "FeatureView.h"
+
+namespace Drawing
 {
 
-/**
- * The FeaturePointsImportAscii class reads the STL Points format
- * into the FreeCAD workspace.
- * @author Werner Mayer
+/** Base class of all View Features in the drawing module
  */
-class ImportAscii : public Points::Feature
+class DrawingExport FeatureViewSpreadsheet : public FeatureView
 {
-  PROPERTY_HEADER(Points::ImportAscii);
+    PROPERTY_HEADER(Drawing::FeatureView);
 
 public:
-  ImportAscii();
+    /// Constructor
+    FeatureViewSpreadsheet(void);
+    virtual ~FeatureViewSpreadsheet();
+    App::PropertyLink         Source;
+    App::PropertyString       CellStart;
+    App::PropertyString       CellEnd;
+    App::PropertyString       Font;
+    App::PropertyColor        Color;
+    App::PropertyFloat        LineWidth;
+    App::PropertyFloat        FontSize;
 
-  App::PropertyString FileName;
+    /** @name methods overide Feature */
+    //@{
+    /// recalculate the Feature
+    virtual App::DocumentObjectExecReturn *execute(void);
+    //@}
 
-  /** @name methods overide Feature */
-  //@{
-  /// recalculate the Feature
-  App::DocumentObjectExecReturn *execute(void);
-  short mustExecute() const;
-  //@}
+    /// returns the type name of the ViewProvider
+    virtual const char* getViewProviderName(void) const {
+        return "DrawingGui::ViewProviderDrawingView";
+    }
 };
 
-}
+} //namespace Drawing
 
-#endif // FEATURE_Points_IMPORT_STL_H 
+
+#endif

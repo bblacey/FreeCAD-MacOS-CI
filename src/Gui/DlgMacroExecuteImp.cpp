@@ -40,6 +40,7 @@
 
 #include <App/Application.h>
 #include <App/Document.h>
+#include <Base/Interpreter.h>
 
 using namespace Gui;
 using namespace Gui::Dialog;
@@ -51,9 +52,9 @@ using namespace Gui::Dialog;
  *  name 'name' and widget flags set to 'f' 
  *
  *  The dialog will by default be modeless, unless you set 'modal' to
- *  TRUE to construct a modal dialog.
+ *  true to construct a modal dialog.
  */
-DlgMacroExecuteImp::DlgMacroExecuteImp( QWidget* parent, Qt::WFlags fl )
+DlgMacroExecuteImp::DlgMacroExecuteImp( QWidget* parent, Qt::WindowFlags fl )
     : QDialog( parent, fl ), WindowParameter( "Macro" )
 {
     this->setupUi(this);
@@ -118,10 +119,18 @@ void DlgMacroExecuteImp::accept()
     QDialog::accept();
     QDir dir(this->macroPath);
     QFileInfo fi(dir, item->text(0));
-    Application::Instance->macroManager()->run(Gui::MacroManager::File, fi.filePath().toUtf8());
-    // after macro run recalculate the document
-    if (Application::Instance->activeDocument())
-        Application::Instance->activeDocument()->getDocument()->recompute();
+    try {
+        Application::Instance->macroManager()->run(Gui::MacroManager::File, fi.filePath().toUtf8());
+        // after macro run recalculate the document
+        if (Application::Instance->activeDocument())
+            Application::Instance->activeDocument()->getDocument()->recompute();
+    }
+    catch (const Base::SystemExitException&) {
+        // handle SystemExit exceptions
+        Base::PyGILStateLocker locker;
+        Base::PyException e;
+        e.ReportException();
+    }
 }
 
 /**
@@ -148,7 +157,7 @@ void DlgMacroExecuteImp::on_editButton_clicked()
     if (!item) return;
 
     QDir dir(this->macroPath);
-    QString file = QString::fromAscii("%1/%2").arg(dir.absolutePath()).arg(item->text(0));
+    QString file = QString::fromLatin1("%1/%2").arg(dir.absolutePath()).arg(item->text(0));
 
     Application::Instance->open(file.toUtf8(), "FreeCADGui");
     close();
@@ -185,7 +194,7 @@ void DlgMacroExecuteImp::on_createButton_clicked()
             editor->setWindowIcon(Gui::BitmapFactory().iconFromTheme("applications-python"));
             PythonEditorView* edit = new PythonEditorView(editor, getMainWindow());
             edit->open(fi.absoluteFilePath());
-            edit->setWindowTitle(QString::fromAscii("%1[*]").arg(fn));
+            edit->setWindowTitle(QString::fromLatin1("%1[*]").arg(fn));
             edit->resize(400, 300);
             getMainWindow()->addWindow(edit);
             close();
