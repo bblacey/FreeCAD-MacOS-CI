@@ -19,7 +19,7 @@ before_install:
 - pip install six py-dateutil mock nose pyparsing pytz #numpy
 #- brew install 'https://raw.githubusercontent.com/tdsmith/homebrew-python/matplotlib-prepend/matplotlib.rb'
 - brew tap --full homebrew/python
-- git checkout -q -f 1c4325b /usr/local/Library/Taps/homebrew/homebrew-python/matplotlib.rb
+- cd /usr/local/Library/Taps/homebrew/homebrew-python/ && git checkout -q -f 1c4325b matplotlib.rb && cd ${TRAVIS_BUILD_DIR}
 - brew install homebrew/python/matplotlib --with-pyside
 - #pip install matplotlib
 - ### Install matplotlib from source
