@@ -17,9 +17,13 @@ before_install:
 - pip install six py-dateutil mock nose pyparsing pytz
 - brew install homebrew/python/matplotlib --with-pyside
 - if [ -e /usr/local/lib/libgdal.1.dylib ]; then brew unlink gdal; fi
+# Installed 3DConnexion frameworks
+- curl -o /tmp/3dFW.dmg -L 'http://www.3dconnexion.com/index.php?eID=sdl&ext=tx_iccsoftware&oid=a273bdbc-c289-e10d-816b-567043331c9e&filename=3DxWareMac_v10-2-5_r2142.dmg'
+- hdiutil mount /tmp/3dFW.dmg
+- sudo installer -package /Volumes/3Dconnexion\ Software/Install\ 3Dconnexion\ software.pkg -target /
 
 install:
-- mkdir build && cd build && cmake -DFREECAD_USE_EXTERNAL_KDL=ON -DFREECAD_CREATE_MAC_APP=ON -DCMAKE_BUILD_TYPE=Release ../
+- mkdir build && cd build && cmake -DFREECAD_USE_EXTERNAL_KDL=ON -DFREECAD_CREATE_MAC_APP=ON -DFREECAD_USE_3DCONNEXION=ON -DCMAKE_BUILD_TYPE=Release ../
 
 script:
 - make -j2
