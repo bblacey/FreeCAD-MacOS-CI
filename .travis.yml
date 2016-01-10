@@ -19,7 +19,7 @@ before_install:
 - pip install six py-dateutil mock nose pyparsing pytz #numpy
 - brew tap --full homebrew/python
 - pushd /usr/local/Library/Taps/homebrew/homebrew-python && git checkout -q -f 1c4325b7c3efaa599552a23cb6b0e76d0ca0c3ab matplotlib.rb && popd
-- brew install --verbose --debug homebrew/python/matplotlib --with-pyside
+- brew install homebrew/python/matplotlib --with-pyside
 - #pip install matplotlib
 - ### Install matplotlib from source
 - #git clone --depth 1 git://github.com/matplotlib/matplotlib.git
@@ -40,9 +40,9 @@ install:
 
 script:
 - make -j2
-- export DYLD_PRINT_OPTS=TRUE
-- export DYLD_PRINT_LIBRARIES_POST_LAUNCH=TRUE
-- export DYLD_PRINT_RPATHS=TRUE
+#- export DYLD_PRINT_OPTS=TRUE
+#- export DYLD_PRINT_LIBRARIES_POST_LAUNCH=TRUE
+#- export DYLD_PRINT_RPATHS=TRUE
 - bin/FreeCAD --run-test 0
 - bin/FreeCAD --log-file /tmp/FreeCAD.log &
 - sleep 10 && pkill FreeCAD
