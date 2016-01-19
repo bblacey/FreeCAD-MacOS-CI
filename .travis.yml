@@ -41,9 +41,6 @@ install:
 
 script:
 - make -j2
-#- export DYLD_PRINT_OPTS=TRUE
-#- export DYLD_PRINT_LIBRARIES_POST_LAUNCH=TRUE
-#- export DYLD_PRINT_RPATHS=TRUE
 - bin/FreeCAD --run-test 0
 - bin/FreeCAD --log-file /tmp/FreeCAD.log &
 - sleep 10 && pkill FreeCAD
@@ -60,17 +57,13 @@ script:
 - #popd
 
 after_success:
-- pip install dmgbuild
-- export MASTER_COMMIT=$(git ls-remote origin | grep 'refs/heads/master' | cut -f1)
-- #export VSN=$(sed -E -n -e 's/(^#define FCRevision.*")([0-9]+)(.*Git.*$)/\2/p' ${TRAVIS_BUILD_DIR}/build/src/Build/Version.h)-${TRAVIS_COMMIT:0:7}
+- export MASTER_COMMIT=$(git ls-remote origin master | cut -f1)
 - export VSN=$(sed -E -n -e 's/(^#define FCRevision.*")([0-9]+)(.*Git.*$)/\2/p' ${TRAVIS_BUILD_DIR}/build/src/Build/Version.h)-${MASTER_COMMIT:0:7}
 - echo "Version = $VSN"
-- export DEPLOYMENT_ARCHIVE="FreeCAD_osx-${VSN}.zip"
-- echo $(git rev-parse master)
-- #ls -l /usr/local
-- #cd /usr/local && zip -q -r -X "${DEPLOYMENT_ARCHIVE}.zip" FreeCAD.app -x FreeCAD.app/Contents/doc*
-- #tar -cz -C /usr/local --exclude '*/doc/*' -f "${DEPLOYMENT_ARCHIVE}" FreeCAD.app
-- cd /usr/local && zip -q -r -X "${DEPLOYMENT_ARCHIVE}" FreeCAD.app -x FreeCAD.app/Contents/doc\*
+- export DEPLOYMENT_ARCHIVE="FreeCAD_osx-${VSN}.dmg"
+- #cd /usr/local && zip -q -r -X "${DEPLOYMENT_ARCHIVE}" FreeCAD.app -x FreeCAD.app/Contents/doc\*
+- pip install dmgbuild
+- dmgbuild -s src/Tools/DMGSettings.py "FreeCAD ${VSN}" ${DEPLOYMENT_ARCHIVE}
 - travis_retry curl --ftp-create-dirs -T ${DEPLOYMENT_ARCHIVE} -u ${FTP_USER}:${FTP_PASSWORD} ftp://${FTP_HOST}/${DEPLOYMENT_ARCHIVE}
 
 deploy:
