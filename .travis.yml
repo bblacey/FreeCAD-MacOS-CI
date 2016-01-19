@@ -60,6 +60,7 @@ script:
 - #popd
 
 after_success:
+- pip install dmgbuild
 - export MASTER_COMMIT=$(git ls-remote origin | grep 'refs/heads/master' | cut -f1)
 - #export VSN=$(sed -E -n -e 's/(^#define FCRevision.*")([0-9]+)(.*Git.*$)/\2/p' ${TRAVIS_BUILD_DIR}/build/src/Build/Version.h)-${TRAVIS_COMMIT:0:7}
 - export VSN=$(sed -E -n -e 's/(^#define FCRevision.*")([0-9]+)(.*Git.*$)/\2/p' ${TRAVIS_BUILD_DIR}/build/src/Build/Version.h)-${MASTER_COMMIT:0:7}
