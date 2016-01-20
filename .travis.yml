@@ -15,6 +15,7 @@ before_install:
 #- brew install eigen freetype qt opencascade python boost-python pyside pyside-tools xerces-c orocos-kdl
 #- travis_wait brew install opencascade --without-extras --without-gl2ps
 - brew install --without-framework --without-soqt sanelson/freecad/coin
+- sudo rm -rf /Library/Python/2.7/site-packages  #Work-around a pypa/pip/#3394 setuptools bug
 - brew install --HEAD pivy
 - pip install six py-dateutil mock nose pyparsing pytz dmgbuild #numpy
 #- brew install 'https://raw.githubusercontent.com/tdsmith/homebrew-python/matplotlib-prepend/matplotlib.rb'
