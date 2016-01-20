@@ -45,7 +45,7 @@ before_deploy:
 - export MASTER_COMMIT=$(git ls-remote origin master | cut -f1)
 - export VSN=$(sed -E -n -e 's/(^#define FCRevision.*")([0-9]+)(.*Git.*$)/\2/p' ${TRAVIS_BUILD_DIR}/build/src/Build/Version.h)-${MASTER_COMMIT:0:7}
 - echo "Version = $VSN"
-- export DEPLOYMENT_ARCHIVE="FreeCAD_${TRAVIS_OS_NAME}-${VSN}.dmg"
+- export DEPLOYMENT_ARCHIVE="${TRAVIS_BUILD_DIR}/FreeCAD_${TRAVIS_OS_NAME}-${VSN}.dmg"
 - dmgbuild -s ../src/Tools/DMGSettings.py "FreeCAD ${VSN}" ${DEPLOYMENT_ARCHIVE}
 
 deploy:
