@@ -14,7 +14,7 @@ before_install:
 - brew install eigen freetype qt homebrew/science/oce python boost-python pyside pyside-tools xerces-c orocos-kdl
 - brew install --without-framework --without-soqt sanelson/freecad/coin
 - brew install --HEAD pivy
-- pip install six py-dateutil mock nose pyparsing pytz dmgbuild
+- pip install six py-dateutil mock nose pyparsing pytz numpy dmgbuild
 - brew install homebrew/python/matplotlib --with-pyside
 - brew tap --full homebrew/python
 - cd /usr/local/Library/Taps/homebrew/homebrew-python/ && git checkout -q -f 1c4325b matplotlib.rb && cd ${TRAVIS_BUILD_DIR}
