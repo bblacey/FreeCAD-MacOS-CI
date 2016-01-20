@@ -16,7 +16,7 @@ before_install:
 #- travis_wait brew install opencascade --without-extras --without-gl2ps
 - brew install --without-framework --without-soqt sanelson/freecad/coin
 - brew install --HEAD pivy
-- pip install six py-dateutil mock nose pyparsing pytz #numpy
+- pip install six py-dateutil mock nose pyparsing pytz dmgbuild #numpy
 #- brew install 'https://raw.githubusercontent.com/tdsmith/homebrew-python/matplotlib-prepend/matplotlib.rb'
 - brew tap --full homebrew/python
 - cd /usr/local/Library/Taps/homebrew/homebrew-python/ && git checkout -q -f 1c4325b matplotlib.rb && cd ${TRAVIS_BUILD_DIR}
@@ -62,8 +62,7 @@ after_success:
 - echo "Version = $VSN"
 - export DEPLOYMENT_ARCHIVE="FreeCAD_osx-${VSN}.dmg"
 - #cd /usr/local && zip -q -r -X "${DEPLOYMENT_ARCHIVE}" FreeCAD.app -x FreeCAD.app/Contents/doc\*
-- pip install dmgbuild
-- dmgbuild -s src/Tools/DMGSettings.py "FreeCAD ${VSN}" ${DEPLOYMENT_ARCHIVE}
+- dmgbuild -s ../src/Tools/DMGSettings.py "FreeCAD ${VSN}" ${DEPLOYMENT_ARCHIVE}
 - travis_retry curl --ftp-create-dirs -T ${DEPLOYMENT_ARCHIVE} -u ${FTP_USER}:${FTP_PASSWORD} ftp://${FTP_HOST}/${DEPLOYMENT_ARCHIVE}
 
 deploy:
