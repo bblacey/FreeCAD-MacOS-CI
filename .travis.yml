@@ -12,11 +12,13 @@ before_install:
 - sudo rm -rf /Library/Python/2.7/site-packages  #Work-around a pypa/pip/#3394 setuptools bug
 - ls -l /usr/local/lib/python2.7/site-packages
 - cat /usr/local/lib/python2.7/site-packages/sitecustomize.py
-- brew unlink mercurial
+- brew unlink mercurial gdal
+- ls -l /usr/local/lib/python2.7/site-packages
 - brew update
 - brew tap homebrew/science
 - brew tap sanelson/freecad
 - brew install eigen freetype qt homebrew/science/oce python boost-python pyside pyside-tools xerces-c orocos-kdl
+- python -c 'import sys; print(sys.path)'
 #- brew install eigen freetype qt opencascade python boost-python pyside pyside-tools xerces-c orocos-kdl
 #- travis_wait brew install opencascade --without-extras --without-gl2ps
 - brew install --without-framework --without-soqt sanelson/freecad/coin
@@ -32,7 +34,7 @@ before_install:
 - python -c 'import sys; print(sys.path)'
 - ls -l /usr/local/lib/python2.7/site-packages
 - ls -l /usr/local/lib/python2.7/site-packages/matplotlib
-- ls -l ls -l /usr/local/Cellar/matplotlib/1.4.3/lib/python2.7/
+- ls -l /usr/local/Cellar/matplotlib/1.4.3/lib/python2.7/
 - pip install dmgbuild
 - ls -l /usr/local/lib/python2.7/site-packages
 - #pip install matplotlib
@@ -42,6 +44,8 @@ before_install:
 - #make -j2 install
 - #popd
 - if [ -e /usr/local/lib/libgdal.1.dylib ]; then brew unlink gdal; fi
+- if [ -e /usr/local/lib/python/2.7/site-packages/mercurial ]; then brew unlink mercurial; fi
+- ls -l /usr/local/lib/python2.7/site-packages
 # Installed 3DConnexion frameworks
 - curl -o /tmp/3dFW.dmg -L 'http://www.3dconnexion.com/index.php?eID=sdl&ext=tx_iccsoftware&oid=a273bdbc-c289-e10d-816b-567043331c9e&filename=3DxWareMac_v10-2-5_r2142.dmg'
 - hdiutil mount /tmp/3dFW.dmg
