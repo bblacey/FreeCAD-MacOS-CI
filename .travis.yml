@@ -11,6 +11,8 @@ before_install:
 - python -c 'import sys; print(sys.path)'
 - sudo rm -rf /Library/Python/2.7/site-packages  #Work-around a pypa/pip/#3394 setuptools bug
 - ls -l /usr/local/lib/python2.7/site-packages
+- cat /usr/local/lib/python2.7/site-packages/sitecustomize.py
+- brew unlink mercurial
 - brew update
 - brew tap homebrew/science
 - brew tap sanelson/freecad
@@ -21,7 +23,7 @@ before_install:
 - brew install --HEAD pivy
 - python -c 'import sys; print(sys.path)'
 - ls -l /usr/local/lib/python2.7/site-packages
-- pip install six py-dateutil mock nose pyparsing pytz numpy
+- pip install six py-dateutil mock nose pyparsing pytz #numpy
 - python -c 'import sys; print(sys.path)'
 - ls -l /usr/local/lib/python2.7/site-packages
 - brew tap --full homebrew/python
