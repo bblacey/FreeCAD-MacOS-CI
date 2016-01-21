@@ -28,8 +28,8 @@ before_install:
 - pip install six py-dateutil mock nose pyparsing pytz #numpy
 - python -c 'import sys; print(sys.path)'
 - ls -l /usr/local/lib/python2.7/site-packages
-- brew tap --full homebrew/python
-- cd /usr/local/Library/Taps/homebrew/homebrew-python/ && git checkout -q -f 1c4325b matplotlib.rb && cd ${TRAVIS_BUILD_DIR}
+#- brew tap --full homebrew/python
+#- cd /usr/local/Library/Taps/homebrew/homebrew-python/ && git checkout -q -f 1c4325b matplotlib.rb && cd ${TRAVIS_BUILD_DIR}
 - brew install -v -d homebrew/python/matplotlib --with-pyside
 - python -c 'import sys; print(sys.path)'
 - ls -l /usr/local/lib/python2.7/site-packages
