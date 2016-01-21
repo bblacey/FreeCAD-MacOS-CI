@@ -8,7 +8,9 @@ git:
 
 before_install:
 - system_profiler SPHardwareDataType
+- python -c 'import sys; print(sys.path)'
 - sudo rm -rf /Library/Python/2.7/site-packages  #Work-around a pypa/pip/#3394 setuptools bug
+- ls -l /usr/local/lib/python2.7/site-packages
 - brew update
 - brew tap homebrew/science
 - brew tap sanelson/freecad
@@ -17,11 +19,20 @@ before_install:
 #- travis_wait brew install opencascade --without-extras --without-gl2ps
 - brew install --without-framework --without-soqt sanelson/freecad/coin
 - brew install --HEAD pivy
-#- pip install six py-dateutil mock nose pyparsing pytz numpy dmgbuild
+- python -c 'import sys; print(sys.path)'
+- ls -l /usr/local/lib/python2.7/site-packages
+- pip install six py-dateutil mock nose pyparsing pytz numpy
+- python -c 'import sys; print(sys.path)'
+- ls -l /usr/local/lib/python2.7/site-packages
 - brew tap --full homebrew/python
 - cd /usr/local/Library/Taps/homebrew/homebrew-python/ && git checkout -q -f 1c4325b matplotlib.rb && cd ${TRAVIS_BUILD_DIR}
-- brew install homebrew/python/matplotlib --with-pyside
+- brew install -v -d homebrew/python/matplotlib --with-pyside
+- python -c 'import sys; print(sys.path)'
+- ls -l /usr/local/lib/python2.7/site-packages
+- ls -l /usr/local/lib/python2.7/site-packages/matplotlib
+- ls -l ls -l /usr/local/Cellar/matplotlib/1.4.3/lib/python2.7/
 - pip install dmgbuild
+- ls -l /usr/local/lib/python2.7/site-packages
 - #pip install matplotlib
 - ### Install matplotlib from source
 - #git clone --depth 1 git://github.com/matplotlib/matplotlib.git
