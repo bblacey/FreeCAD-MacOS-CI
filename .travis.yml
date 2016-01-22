@@ -34,7 +34,8 @@ before_install:
 - python -c 'import sys; print(sys.path)'
 - ls -l /usr/local/lib/python2.7/site-packages
 - ls -l /usr/local/lib/python2.7/site-packages/matplotlib
-- ls -l /usr/local/Cellar/matplotlib/1.4.3/lib/python2.7/
+- ls -l /usr/local/Cellar/matplotlib/*/
+- ls -l /usr/local/Cellar/matplotlib/*/lib/python2.7/site-packages
 - pip install dmgbuild
 - ls -l /usr/local/lib/python2.7/site-packages
 - #pip install matplotlib
