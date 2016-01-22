@@ -8,12 +8,7 @@ git:
 
 before_install:
 - system_profiler SPHardwareDataType
-- python -c 'import sys; print(sys.path)'
 - sudo rm -rf /Library/Python/2.7/site-packages  #Work-around a pypa/pip/#3394 setuptools bug
-- ls -l /usr/local/lib/python2.7/site-packages
-- cat /usr/local/lib/python2.7/site-packages/sitecustomize.py
-- brew unlink mercurial gdal
-- ls -l /usr/local/lib/python2.7/site-packages
 - brew update
 - brew tap homebrew/science
 - brew tap sanelson/freecad
@@ -45,7 +40,6 @@ before_install:
 - #make -j2 install
 - #popd
 - if [ -e /usr/local/lib/libgdal.1.dylib ]; then brew unlink gdal; fi
-- if [ -e /usr/local/lib/python/2.7/site-packages/mercurial ]; then brew unlink mercurial; fi
 - ls -l /usr/local/lib/python2.7/site-packages
 - cat /usr/local/lib/python2.7/site-packages/sitecustomize.py
 # Installed 3DConnexion frameworks
@@ -77,12 +71,10 @@ script:
 - #popd
 
 after_success:
-- export MASTER_COMMIT=$(git ls-remote origin master | cut -f1)
-- export VSN=$(sed -E -n -e 's/(^#define FCRevision.*")([0-9]+)(.*Git.*$)/\2/p' ${TRAVIS_BUILD_DIR}/build/src/Build/Version.h)-${MASTER_COMMIT:0:7}
-- echo "Version = $VSN"
-- export DEPLOYMENT_ARCHIVE="FreeCAD_osx-${VSN}.dmg"
-- #cd /usr/local && zip -q -r -X "${DEPLOYMENT_ARCHIVE}" FreeCAD.app -x FreeCAD.app/Contents/doc\*
-- dmgbuild -s ../src/Tools/DMGSettings.py "FreeCAD ${VSN}" ${DEPLOYMENT_ARCHIVE}
+- export VSN=$(${TRAVIS_BUILD_DIR}/src/Tools/ArchiveNameFromVersionHeader.py} --git-SHA=$(git ls-remote origin master))
+- export DEPLOYMENT_ARCHIVE=${VSN}.dmg
+- echo ${DEPLOYMENT_ARCHIVE}
+- dmgbuild -s ${TRAVIS_BUILD_DIR}/src/Tools/DMGSettings.py "${VSN}" ${DEPLOYMENT_ARCHIVE}
 - travis_retry curl --ftp-create-dirs -T ${DEPLOYMENT_ARCHIVE} -u ${FTP_USER}:${FTP_PASSWORD} ftp://${FTP_HOST}/${DEPLOYMENT_ARCHIVE}
 
 deploy:

@@ -3,7 +3,7 @@ import sys
 import subprocess
 import pprint
 
-SYS_PATHS = ["/System/", "/usr/lib/"]
+SYS_PATHS = ["/System/", "/usr/lib/", "/Library/Frameworks/3DconnexionClient.framework"]
 
 class LibraryNotFound(Exception):
     pass
