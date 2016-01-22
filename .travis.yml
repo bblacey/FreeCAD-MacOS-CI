@@ -71,7 +71,7 @@ script:
 - #popd
 
 after_success:
-- export VSN=$(${TRAVIS_BUILD_DIR}/src/Tools/ArchiveNameFromVersionHeader.py} --git-SHA=$(git ls-remote origin master))
+- export VSN=$(python ${TRAVIS_BUILD_DIR}/src/Tools/ArchiveNameFromVersionHeader.py} --git-SHA=$(git ls-remote origin master))
 - export DEPLOYMENT_ARCHIVE=${VSN}.dmg
 - echo ${DEPLOYMENT_ARCHIVE}
 - dmgbuild -s ${TRAVIS_BUILD_DIR}/src/Tools/DMGSettings.py "${VSN}" ${DEPLOYMENT_ARCHIVE}
