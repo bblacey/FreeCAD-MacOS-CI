@@ -37,7 +37,6 @@ def main():
     if(len(sys.argv) < 2):
         sys.stderr.write("Usage:  archiveNameFromVersion <path to Version.h> [--git-SHA=]\n")
 
-    print sys.argv[1]
     try:
         opts, args = getopt.getopt(sys.argv[2:], "g:", ["git-SHA="])
     except getopt.GetoptError:
