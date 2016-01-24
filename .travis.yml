@@ -7,14 +7,11 @@ git:
   depth: 800
 
 before_install:
-- system_profiler SPHardwareDataType
 - brew update
-- brew tap homebrew/science
-- brew tap sanelson/freecad
+#- brew tap homebrew/science
+#- brew install eigen freetype qt homebrew/science/oce python boost-python pyside pyside-tools xerces-c orocos-kdl homebrew/python/matplotlib
 - brew install eigen freetype qt homebrew/science/oce python boost-python pyside pyside-tools xerces-c orocos-kdl
-- brew install --without-framework --without-soqt sanelson/freecad/coin
-- brew install --HEAD pivy
-- pip install six py-dateutil mock nose pyparsing pytz #numpy 
+- brew tap sanelson/freecad && brew install --without-framework --without-soqt sanelson/freecad/coin
 - brew tap --full homebrew/python
 - cd /usr/local/Library/Taps/homebrew/homebrew-python/ && git checkout -q -f 1c4325b matplotlib.rb && cd ${TRAVIS_BUILD_DIR}
 - brew install homebrew/python/matplotlib --with-pyside
@@ -23,7 +20,6 @@ before_install:
 - curl -o /tmp/3dFW.dmg -L 'http://www.3dconnexion.com/index.php?eID=sdl&ext=tx_iccsoftware&oid=a273bdbc-c289-e10d-816b-567043331c9e&filename=3DxWareMac_v10-2-5_r2142.dmg'
 - hdiutil mount /tmp/3dFW.dmg
 - sudo installer -package /Volumes/3Dconnexion\ Software/Install\ 3Dconnexion\ software.pkg -target /
-- pip install dmgbuild
 
 install:
 - mkdir build && cd build && cmake -DFREECAD_USE_EXTERNAL_KDL=ON -DFREECAD_CREATE_MAC_APP=ON -DFREECAD_USE_3DCONNEXION=ON -DCMAKE_BUILD_TYPE=Release ../
@@ -43,6 +39,7 @@ script:
 - grep --file=../.log_errors /tmp/FreeCAD_installed.log ; [ $? == 1 ] && echo "No errors from .log_errors file found in the log after start from /usr/local/bin" || ( echo "Error from .log_errors found!" && false )
 
 before_deploy:
+- pip install dmgbuild
 - export VSN=$(python ${TRAVIS_BUILD_DIR}/src/Tools/ArchiveNameFromVersionHeader.py ${TRAVIS_BUILD_DIR}/build/src/Build/Version.h --git-SHA=$(git ls-remote origin master))
 - export DEPLOYMENT_ARCHIVE=${VSN}.dmg
 - echo ${DEPLOYMENT_ARCHIVE}
