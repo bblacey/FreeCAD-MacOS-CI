@@ -13,35 +13,15 @@ before_install:
 - brew tap homebrew/science
 - brew tap sanelson/freecad
 - brew install eigen freetype qt homebrew/science/oce python boost-python pyside pyside-tools xerces-c orocos-kdl
-- python -c 'import sys; print(sys.path)'
 #- brew install eigen freetype qt opencascade python boost-python pyside pyside-tools xerces-c orocos-kdl
 #- travis_wait brew install opencascade --without-extras --without-gl2ps
 - brew install --without-framework --without-soqt sanelson/freecad/coin
-- brew install --HEAD pivy
-- python -c 'import sys; print(sys.path)'
-- ls -l /usr/local/lib/python2.7/site-packages
-- pip install six py-dateutil mock nose pyparsing pytz Cycler funcsigs pbr #numpy
-- python -c 'import sys; print(sys.path)'
-- ls -l /usr/local/lib/python2.7/site-packages
-#- brew tap --full homebrew/python
-#- cd /usr/local/Library/Taps/homebrew/homebrew-python/ && git checkout -q -f 1c4325b matplotlib.rb && cd ${TRAVIS_BUILD_DIR}
+#- brew install --HEAD pivy
+#- pip install six py-dateutil mock nose pyparsing pytz Cycler funcsigs pbr #numpy
+- brew tap --full homebrew/python
+- cd /usr/local/Library/Taps/homebrew/homebrew-python/ && git checkout -q -f 1c4325b matplotlib.rb && cd ${TRAVIS_BUILD_DIR}
 - brew install -v -d homebrew/python/matplotlib --with-pyside
-- python -c 'import sys; print(sys.path)'
-- ls -l /usr/local/lib/python2.7/site-packages
-- ls -l /usr/local/lib/python2.7/site-packages/matplotlib
-- ls -l /usr/local/Cellar/matplotlib/*/
-- ls -l /usr/local/Cellar/matplotlib/*/lib/python2.7/site-packages
-- pip install dmgbuild
-- ls -l /usr/local/lib/python2.7/site-packages
-- #pip install matplotlib
-- ### Install matplotlib from source
-- #git clone --depth 1 git://github.com/matplotlib/matplotlib.git
-- #pushd matplotlib && python setup.py install
-- #make -j2 install
-- #popd
 - if [ -e /usr/local/lib/libgdal.1.dylib ]; then brew unlink gdal; fi
-- ls -l /usr/local/lib/python2.7/site-packages
-- cat /usr/local/lib/python2.7/site-packages/sitecustomize.py
 # Installed 3DConnexion frameworks
 - curl -o /tmp/3dFW.dmg -L 'http://www.3dconnexion.com/index.php?eID=sdl&ext=tx_iccsoftware&oid=a273bdbc-c289-e10d-816b-567043331c9e&filename=3DxWareMac_v10-2-5_r2142.dmg'
 - hdiutil mount /tmp/3dFW.dmg
@@ -74,6 +54,7 @@ after_success:
 - export VSN=$(python ${TRAVIS_BUILD_DIR}/src/Tools/ArchiveNameFromVersionHeader.py ${TRAVIS_BUILD_DIR}/build/src/Build/Version.h --git-SHA=$(git ls-remote origin master))
 - export DEPLOYMENT_ARCHIVE=${VSN}.dmg
 - echo ${DEPLOYMENT_ARCHIVE}
+- pip install dmgbuild
 - dmgbuild -s ${TRAVIS_BUILD_DIR}/src/Tools/DMGSettings.py "${VSN}" ${DEPLOYMENT_ARCHIVE}
 - travis_retry curl --ftp-create-dirs -T ${DEPLOYMENT_ARCHIVE} -u ${FTP_USER}:${FTP_PASSWORD} ftp://${FTP_HOST}/${DEPLOYMENT_ARCHIVE}
 
