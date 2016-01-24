@@ -14,6 +14,7 @@ before_install:
 - brew tap --full homebrew/python
 - cd /usr/local/Library/Taps/homebrew/homebrew-python/ && git checkout -q -f 1c4325b matplotlib.rb && cd ${TRAVIS_BUILD_DIR}
 - brew install homebrew/python/matplotlib --with-pyside
+- brew install --HEAD pivy
 - if [ -e /usr/local/lib/libgdal.1.dylib ]; then brew unlink gdal; fi
 # Installed 3DConnexion frameworks
 - curl -o /tmp/3dFW.dmg -L 'http://www.3dconnexion.com/index.php?eID=sdl&ext=tx_iccsoftware&oid=a273bdbc-c289-e10d-816b-567043331c9e&filename=3DxWareMac_v10-2-5_r2142.dmg'
