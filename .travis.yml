@@ -16,7 +16,7 @@ before_install:
 #- brew install eigen freetype qt opencascade python boost-python pyside pyside-tools xerces-c orocos-kdl
 #- travis_wait brew install opencascade --without-extras --without-gl2ps
 - brew install --without-framework --without-soqt sanelson/freecad/coin
-#- brew install --HEAD pivy
+- brew install --HEAD pivy
 #- pip install six py-dateutil mock nose pyparsing pytz Cycler funcsigs pbr #numpy
 - brew tap --full homebrew/python
 - cd /usr/local/Library/Taps/homebrew/homebrew-python/ && git checkout -q -f 1c4325b matplotlib.rb && cd ${TRAVIS_BUILD_DIR}
