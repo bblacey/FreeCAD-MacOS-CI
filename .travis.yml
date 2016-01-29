@@ -8,12 +8,8 @@ git:
 
 before_install:
 - brew update
-#- brew install eigen freetype qt homebrew/science/oce python boost-python pyside pyside-tools xerces-c orocos-kdl homebrew/python/matplotlib
-- brew install eigen freetype qt homebrew/science/oce python boost-python pyside pyside-tools xerces-c orocos-kdl
-- brew tap sanelson/freecad && brew install --without-framework --without-soqt sanelson/freecad/coin
-- brew tap --full homebrew/python
-- cd /usr/local/Library/Taps/homebrew/homebrew-python/ && git checkout -q -f 1c4325b matplotlib.rb && cd ${TRAVIS_BUILD_DIR}
-- brew install homebrew/python/matplotlib --with-pyside
+- brew install eigen freetype qt homebrew/science/oce python boost-python pyside pyside-tools xerces-c orocos-kdl homebrew/python/matplotlib
+- brew install --without-framework --without-soqt sanelson/freecad/coin
 - brew install --HEAD pivy
 - if [ -e /usr/local/lib/libgdal.1.dylib ]; then brew unlink gdal; fi
 # Installed 3DConnexion frameworks
