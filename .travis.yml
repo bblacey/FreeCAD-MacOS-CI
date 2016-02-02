@@ -22,7 +22,7 @@ install:
 
 script:
 - make -j2
-- bin/FreeCAD --run-test 0
+#- bin/FreeCAD --run-test 0
 - bin/FreeCAD --log-file /tmp/FreeCAD.log &
 - sleep 10 && pkill FreeCAD
 - cat /tmp/FreeCAD.log
