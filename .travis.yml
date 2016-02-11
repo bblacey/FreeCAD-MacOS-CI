@@ -1,3 +1,7 @@
+env:
+  global:
+    - GH_RELEASE_NAME="deploy-test"
+
 language: cpp
 
 os:
@@ -42,7 +46,11 @@ after_success:
 - echo ${DEPLOYMENT_ARCHIVE}
 - pip install dmgbuild
 - dmgbuild -s ${TRAVIS_BUILD_DIR}/src/Tools/DMGSettings.py "${VSN}" ${DEPLOYMENT_ARCHIVE}
-- travis_retry curl --ftp-create-dirs -T ${DEPLOYMENT_ARCHIVE} -u ${FTP_USER}:${FTP_PASSWORD} ftp://${FTP_HOST}/${DEPLOYMENT_ARCHIVE}
+- #travis_retry curl --ftp-create-dirs -T ${DEPLOYMENT_ARCHIVE} -u ${FTP_USER}:${FTP_PASSWORD} ftp://${FTP_HOST}/${DEPLOYMENT_ARCHIVE}
+- brew install jq
+- export UPLOAD_URL=$(curl -s -u "${GHTOKEN}" "https://api.github.com/repos/${TRAVIS_REPO_SLUG}/releases" | jq ".[] | select(.name==\"${GH_RELEASE_NAME}\").upload_url" | cut -d '{' -f 1 | cut -c 2- )
+- echo ${UPLOAD_URL} 
+- if [ -n "${UPLOAD_URL}" ]; then curl -X POST -s -u "${GHTOKEN}" -H "Content-Type: application/x-apple-diskimage" --data-binary @/usr/local/${DEPLOYMENT_ARCHIVE} "${UPLOAD_URL}?name=${DEPLOYMENT_ARCHIVE}&label=${TRAVIS_OS_NAME}"; fi
 - go get github.com/aktau/github-release
 
 deploy:
@@ -66,6 +74,7 @@ after_script:
 
 env:
   global:
+  - secure: "QoWck9PvW3U4AEkymEcH2o/6us+PGhSFb8+gwKu7rZ2qwcUKUT3OwIcCh+Hq1GQ/p6/td/ANl7l1f5X3hv//YPyElxkY61HixX64l6bQ6nRMEmDMTf8Fh+xx/UoxYj0A9Z0waGW1RlwYgFX3SISzLYkNL2/IYR5RwWNQPdvmH8H/+Uy321YlXx31m61R9IbvWXDPFvqucHm47LiXOVs91vs5CaHlkbyccDdNcUzbR2AtXZGCgSjGArcqx6gvv3ANDKjpcJbAXg3XoQlJj+Kv/dmbZ0kzqw3NuO3xlgM9p5v6TvZuIlQrmWiPJF38OOt771S6S1V5eyojsvB8buof+J+afUMtJMRkG7kzeSSiBID7oxxrj6o2bVfqC8Kyw+MdhhTgjDaNHq3IGhU6SOQtmtN6l9fvpSIkmK8jjxz80gYyp/HDXCsvpoaAF82DBBPQE62p43AccRN9Ru39DX6qCWp9pNhepYED+Z+PH4DFE0zc+x7Fr9e48x8ZIHLhPNmalQKJIXKiWKoiV+Y7GARODdtG2ewAUBgMwd7zU3Ciei+kmnWtGeG7rD+GYSZjZD/MljLFPJb0Pwy5YzGktMk+NOdgTOnO43bZ1Loy7QElwyZkiryDiyDPG+UTOrt9T8qrMyaLXOrZ/JrbtAGbpHCeTc2YSgWXHgzZTHnDI6VOKUU="
   - secure: RAAE+6cnvVI1ZDX1it8K+VuwcC6Lt0SKy9XWCpyXcRZxoFe8QkJSPBJfJGSnri0tAc/vmxOG0WmahibxpT4RFyu4cEMyaXr/P22sRCrW/CYvr+drZF/QHNLx9XndUy4PnWBih6ZJXlEUiszMlM9/pCIt8Ig+cFDSCclQgMCO2rqtUn03m9/EHTX2a1ct2eOPNlFgTPc/pJ1Vld7VBEUCz+de+U3yEyFAQtZO0qmuSobqkyDmEDXXff5JTsMcxl+Hm8RMYVKuUr7iatQgY7ywOMCpw/4qaSQOcNi86jEeewQiqmqneg1II69/Ory5NwxsS7hbHbYm2KADM5JHIoBaNvg9W5SZYz0rzbdm1rcktuEfBaqr/6r4m8i54dIzyJvn66b4IxE5ELzCZLxg5Wb+kM29H7KYeytEoOR+Bge0Vvg6E1QP6huQ9zPKR0+oaepFL6Vp31fRZc1mwMTKXMPCggHrR0e4nsi/oJEkqDGvAna6QqekkgNQtAT0+9TP3s7IcQvEu0V2iGhR4qG149mFYMI3dh7Dfd990lY1acJTdjS4/nSjGtaRluDlWXXQw9+W5CBSA/DTI1RWpytUQ6M0wSymbJokr0aR9HACmxjh8LJZK/ZSjYU+7i71oGMjiCve7gMCSI7UQ1KEIbm2UXhhNyKrMVGc2iqRtOgUt7JT1ac=
   - secure: I+JBrmnlD+/BchmPXvkL+cDzjRmlziJNGniFEHmHZ7GPkjpZ11muQ8/YH9BZ4sFmxOq5EmlMcsaE5Z9AcA4V0ZXpfum4MqISF+oV15Ai4ijiZN4PxvHt9JOWTDtAYJ1XytbH/8vIzQrtqwJMJdLsFOqI3sP0MX2xAKbctsGirujKr8Fr7VVBapBnq3c36uekGtV7ynE4w9OAWNGdLSMF2dre4lSld1qWZ3dd3tllhc3sDCxOr9PFdeBWU5apUoYXTVNwe8TBGscy3joO+h1dEwIfNt4c/IPdpEk3EZfTdGGCFUAeopH/o/9A2/+nRcd8ul0YZwpvEEBoOnt4/TjpAbIRseyXdL9k0MYudFtqWRyvRK3+Xn20+FH781vwY8QrWhdv5nEWBK3vlDgA8J85tRYTrVkWYQ9BY1MFYXhjxPnRJCQpu+HHVVYAI3DMWeE5LxWuvGOkqx6hICUHJHFCcVp1z99UqfdTqvb2QiVmtBZ2vRz6WQlKGVy2mo2Qb0Ebam1lq+pkF+S4su9ZCrElNlohwA/n0qn8zCIWn9FVgu8kCo1n8vLl25v8DFMd02WX1Qt6UfzM8mznb34Uj3ttsjjJlOiP9N2tjwGvLQPCDZ6rxeQfk6rjv7c8JcTFmd/Svlpiw+joRkFZd+letBHxD6d7QGB5jfAh1B04Ifo1eOw=
   - secure: sc/kwCm5XT1apHN6XzqRSsPf3/npKZjV6YSGmpJKMHJpvZFFM3is9e+WDH08+jA18Dqhtg5QfAOuh/2BD7qL+SPCqrAamm4qU8pgHZIfxjIP8NkLhdsBgEQwaZic991ZySnEPt6t+aAHboAxefKbjtab9vuYNE1al9tJ0QPepKFtYjISgTc9yhXySe16mrm1BKQhp9OhYExeQVTR74yRrTkejA+2RJVve/HEFYTQw01aEwIGZiBpQfXxnXJ3p6663cgwVzCffct0nzXuxxCMW9EB+VY+77fAqfAKTSWxu1z4NbHQ4t8Fhm9nIy/rMFxPrLnKn79N8KtIIK/ELW+uaIEO+4R/ScjfsR+1758isque7siEALtlmq7I2W9ggVQVduXJkoRjR9tkAO5DdHFoWdJ6wAwavkGtAmgGVWk/tkZhprgwKF8UC9ImIfyJGVKyhwVzu+u6D8XUI/TUHov3ZoAy9wCITCZVc7A9idPfq10nxu/b+P3W4cnLOmK3S7t3zqO6nP8OIVVooQH/Er35llkeYT+Noxgfr6B4KP/y2CIk+Pn23OUoeglWByQCRokyA45q5Omsf8cXddVbfuOfArmE7mp1cL1a4tEoaD8RzNspd7VuDenntDKpR6+4SmIstmcU/XdOrX8OkB0yYTjWkLA6iBqklFqMrCSPB7ZZUb4=
