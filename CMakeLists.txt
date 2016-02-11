@@ -137,6 +137,7 @@ OPTION(FREECAD_USE_FREETYPE "Builds the features using FreeType libs" ON)
 OPTION(FREECAD_BUILD_DEBIAN "Prepare for a build of a Debian package" OFF)
 
 if(APPLE)
+    SET (CMAKE_OSX_DEPLOYMENT_TARGET 10.6)
     OPTION(FREECAD_CREATE_MAC_APP "Create app bundle on install" OFF)
 
     if(FREECAD_CREATE_MAC_APP)

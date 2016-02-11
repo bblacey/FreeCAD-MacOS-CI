@@ -43,6 +43,7 @@ after_success:
 - pip install dmgbuild
 - dmgbuild -s ${TRAVIS_BUILD_DIR}/src/Tools/DMGSettings.py "${VSN}" ${DEPLOYMENT_ARCHIVE}
 - travis_retry curl --ftp-create-dirs -T ${DEPLOYMENT_ARCHIVE} -u ${FTP_USER}:${FTP_PASSWORD} ftp://${FTP_HOST}/${DEPLOYMENT_ARCHIVE}
+- go get github.com/aktau/github-release
 
 deploy:
   provider: releases
