@@ -51,7 +51,7 @@ after_success:
 - export UPLOAD_URL=$(curl -s -u "${GH_TOKEN}" "https://api.github.com/repos/${TRAVIS_REPO_SLUG}/releases" | jq ".[] | select(.name==\"${GH_RELEASE_NAME}\").upload_url" | cut -d '{' -f 1 | cut -c 2- )
 - echo "${UPLOAD_URL}"
 #- if [ -n "${UPLOAD_URL}" ]; then curl -X POST -s -u "${GH_TOKEN}" -H "Content-Type: application/x-apple-diskimage" --data-binary "@/usr/local/${DEPLOYMENT_ARCHIVE}" "${UPLOAD_URL}?name=${DEPLOYMENT_ARCHIVE}"; fi
-- curl -X POST -s -u "${GH_TOKEN}" -H "Content-Type: application/x-apple-diskimage" --data-binary "@/usr/local/${DEPLOYMENT_ARCHIVE}" "${UPLOAD_URL}?name=${DEPLOYMENT_ARCHIVE}"
+- curl -X POST -s -u "${GH_TOKEN}" -H 'Content-Type: application/x-apple-diskimage' --data-binary @/usr/local/${DEPLOYMENT_ARCHIVE} "${UPLOAD_URL}?name=${DEPLOYMENT_ARCHIVE}"
 
 deploy:
   provider: releases
