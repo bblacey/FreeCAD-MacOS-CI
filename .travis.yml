@@ -24,13 +24,7 @@ install:
 - mkdir build && cd build && cmake -DFREECAD_USE_EXTERNAL_KDL=ON -DFREECAD_CREATE_MAC_APP=ON -DFREECAD_USE_3DCONNEXION=ON -DCMAKE_BUILD_TYPE=Release ../
 
 script:
-- make -j2
-- bin/FreeCAD --run-test 0
-- bin/FreeCAD --log-file /tmp/FreeCAD.log &
-- sleep 10 && pkill FreeCAD
-- cat /tmp/FreeCAD.log
-- grep --file=../.log_errors /tmp/FreeCAD.log ; [ $? == 1 ] && echo "No errors from .log_errors file found in the log after start from build directory" || ( echo "Error from .log_errors found!" && false )
-- sudo make -j2 install/fast
+- sudo make -j2 install
 - /usr/local/FreeCAD.app/Contents/bin/FreeCAD --run-test 0
 - /usr/local/FreeCAD.app/Contents/bin/FreeCAD --log-file /tmp/FreeCAD_installed.log &
 - sleep 10 && pkill FreeCAD
