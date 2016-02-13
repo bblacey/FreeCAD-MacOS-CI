@@ -1,7 +1,7 @@
 env:
   global:
   - GH_RELEASE_NAME="deploy-test"
-  - secure: "Q4gtNCwdJa0+TIqqx3Xr4EHUy14U8pMe8XP0yelQOx/8IawJDtyvWWlPijeahmIUQGQU6D/p+9K8Bu2Awm9u27PbITAzW8TeJ6VYCLEoupJzcXSFm9BPCJRUxqSkYHcNw88nmw2KekgQDrhDBbrjVMDkVSY6TYXUpCczclWGBK7QD5bLXbN3UEBnA+PGcnhkmKJj8CeTw+I8Y037D09ECoz51LOcp3DxSMKzTxqhJXwkl2majd1L+oXj5ZVNeTB/3xLUihlN2VffS1rqHooA5PANUYOVgPk0SvzmzMaL5hU3t6DmsZPWfb6kYDWc7ckg1wKE38RZq9FVdLjyPYopjEEu8BCYIjESiVac2wa5ZqN3Xqc7k0Xz3K8K5Vrif7CSiS6khs5+KJuaBBaPuz7y7RKi4H3DEtF4g3cmuD3AGHcZgwuaLqyHwKviWc/WwFyuBaC3U7uBEXkr5Lv9MwIoOGO5z+SmfCz197ZS6Jh3n2BztMBaM2Rv40IxOG2CPT8iSRppCShtFeCUN4Kk/zOidsUFyW2qbtFzaSYyoHhW4bO2fKTN6ZfGeS1QvrzuP4ZAaC+KBTwG/r4YeNJrc9OmdwfGidqdcdoIkXs7eoa7kvxNN48jv9UHIewK0sgZ5HIj5DeVx9jKfciTY/Uw2cG0BGN9ASQlCBKA8RpRlz35IAc="
+
 language: cpp
 
 os:
@@ -21,7 +21,7 @@ before_install:
 - sudo installer -package /Volumes/3Dconnexion\ Software/Install\ 3Dconnexion\ software.pkg -target /
 
 install:
-- mkdir build && cd build && cmake -DFREECAD_USE_EXTERNAL_KDL=ON -DFREECAD_CREATE_MAC_APP=ON -DFREECAD_USE_3DCONNEXION=ON -DCMAKE_BUILD_TYPE=Release ../
+- mkdir build && cd build && cmake -DFREECAD_USE_EXTERNAL_KDL=ON -DFREECAD_CREATE_MAC_APP=ON -DFREECAD_USE_3DCONNEXION=ON -DCMAKE_BUILD_TYPE=Debug ../
 
 script:
 - sudo make -j2 install
@@ -46,17 +46,6 @@ after_success:
 - echo "${UPLOAD_URL}"
 - if [ -n "${UPLOAD_URL}" ]; then curl -X POST -s -u "${GH_TOKEN}" -H "Content-Type:application/x-apple-diskimage" --data-binary "@${DEPLOYMENT_ARCHIVE}" "${UPLOAD_URL}?name=${DEPLOYMENT_ARCHIVE}"; fi
 
-deploy:
-  provider: releases
-  api_key:
-    secure: DlnEwU6+O3vt2mAy0lvD5qhsw8p4yo3eIpH6xRqU5goKfUYXWLU7h/+C2MQsyof6mD2ZPrHH7PHgwBdif2lcIy3aRDc+F3ocSQBEQcjm+FEq/vLNb3QR5q+k/sLl0u+Va/TamU/KLlTIRpDelWL/9Ik5NaGR7nvxkFw6a8fAkS1cTbqwMpPCtuju+Uv6Ahs7peYRkAVbalJ82oP3651pinHJKgljhY76+35IJS2H5mr2biFTGFBX/lnvfSxbhM5kKvJWBuYX3VWEuXcNE3o86itswruLEV4krJcyU6TUr8KA+uPBVgkf0TFQyPW1t7c6UH4KLSmqP8AmcfO+qzj2Ex+FqFNCubLyXHkED4Yss2OnxLh2J6sxzEyHhE5UXHHUAvOgeYATtMcQ9K6nHdUtIBoga14HMURJkcdQMel0Wc6t18MZrJnnzykzmqOVNpg1f1AcPcE0ZkLzaFA34Kq04DoHEB2LOscIAuC+sbXPHkb6cdycz5qP80a1VNMpek5QZgmjHhp1Vi2PdlMEl+ezp9e/QLfHjo4Yge98EtkiaiXH1DKARkJlKFXQL9OKKovnQtNRcvJhCUGymgTXXaBomyk6U0DWak8AONj7DYwtnVfFlBZ10TgCd+0oNuLtni9k64xc13aI224i0Y3BDrgn62ycAvha8Ecmn5nWbkzSva8=
-  file: "/usr/local/${DEPLOYMENT_ARCHIVE}"
-  skip_cleanup: true
-  on:
-    repo: bblacey/FreeCAD-MacOS-CI
-    all_branches: true
-    tags: true
-
 after_script:
 - if [ ${TRAVIS_TEST_RESULT} == 0 ]; then export MSG="SUCCEEDED"; else export MSG="FAILED"; fi
 - curl -s --form-string "token=${PO_APP}" --form-string "user=${PO_USER}" --form-string "html=1" --form-string 
@@ -64,10 +53,3 @@ after_script:
   <a href=\"https://api.travis-ci.org/jobs/${TRAVIS_JOB_ID}/log.txt?deansi=true\">Build ${TRAVIS_BUILD_NUMBER} Log</a><br>
   <a href=\"https://github.com/bblacey/FreeCAD-MacOS-CI/releases/tag/${TRAVIS_COMMIT}\">Download build ${VSN} from GitHub</a>"
   https://api.pushover.net/1/messages.json
-
-#  - secure: RAAE+6cnvVI1ZDX1it8K+VuwcC6Lt0SKy9XWCpyXcRZxoFe8QkJSPBJfJGSnri0tAc/vmxOG0WmahibxpT4RFyu4cEMyaXr/P22sRCrW/CYvr+drZF/QHNLx9XndUy4PnWBih6ZJXlEUiszMlM9/pCIt8Ig+cFDSCclQgMCO2rqtUn03m9/EHTX2a1ct2eOPNlFgTPc/pJ1Vld7VBEUCz+de+U3yEyFAQtZO0qmuSobqkyDmEDXXff5JTsMcxl+Hm8RMYVKuUr7iatQgY7ywOMCpw/4qaSQOcNi86jEeewQiqmqneg1II69/Ory5NwxsS7hbHbYm2KADM5JHIoBaNvg9W5SZYz0rzbdm1rcktuEfBaqr/6r4m8i54dIzyJvn66b4IxE5ELzCZLxg5Wb+kM29H7KYeytEoOR+Bge0Vvg6E1QP6huQ9zPKR0+oaepFL6Vp31fRZc1mwMTKXMPCggHrR0e4nsi/oJEkqDGvAna6QqekkgNQtAT0+9TP3s7IcQvEu0V2iGhR4qG149mFYMI3dh7Dfd990lY1acJTdjS4/nSjGtaRluDlWXXQw9+W5CBSA/DTI1RWpytUQ6M0wSymbJokr0aR9HACmxjh8LJZK/ZSjYU+7i71oGMjiCve7gMCSI7UQ1KEIbm2UXhhNyKrMVGc2iqRtOgUt7JT1ac=
-#  - secure: I+JBrmnlD+/BchmPXvkL+cDzjRmlziJNGniFEHmHZ7GPkjpZ11muQ8/YH9BZ4sFmxOq5EmlMcsaE5Z9AcA4V0ZXpfum4MqISF+oV15Ai4ijiZN4PxvHt9JOWTDtAYJ1XytbH/8vIzQrtqwJMJdLsFOqI3sP0MX2xAKbctsGirujKr8Fr7VVBapBnq3c36uekGtV7ynE4w9OAWNGdLSMF2dre4lSld1qWZ3dd3tllhc3sDCxOr9PFdeBWU5apUoYXTVNwe8TBGscy3joO+h1dEwIfNt4c/IPdpEk3EZfTdGGCFUAeopH/o/9A2/+nRcd8ul0YZwpvEEBoOnt4/TjpAbIRseyXdL9k0MYudFtqWRyvRK3+Xn20+FH781vwY8QrWhdv5nEWBK3vlDgA8J85tRYTrVkWYQ9BY1MFYXhjxPnRJCQpu+HHVVYAI3DMWeE5LxWuvGOkqx6hICUHJHFCcVp1z99UqfdTqvb2QiVmtBZ2vRz6WQlKGVy2mo2Qb0Ebam1lq+pkF+S4su9ZCrElNlohwA/n0qn8zCIWn9FVgu8kCo1n8vLl25v8DFMd02WX1Qt6UfzM8mznb34Uj3ttsjjJlOiP9N2tjwGvLQPCDZ6rxeQfk6rjv7c8JcTFmd/Svlpiw+joRkFZd+letBHxD6d7QGB5jfAh1B04Ifo1eOw=
-#  - secure: sc/kwCm5XT1apHN6XzqRSsPf3/npKZjV6YSGmpJKMHJpvZFFM3is9e+WDH08+jA18Dqhtg5QfAOuh/2BD7qL+SPCqrAamm4qU8pgHZIfxjIP8NkLhdsBgEQwaZic991ZySnEPt6t+aAHboAxefKbjtab9vuYNE1al9tJ0QPepKFtYjISgTc9yhXySe16mrm1BKQhp9OhYExeQVTR74yRrTkejA+2RJVve/HEFYTQw01aEwIGZiBpQfXxnXJ3p6663cgwVzCffct0nzXuxxCMW9EB+VY+77fAqfAKTSWxu1z4NbHQ4t8Fhm9nIy/rMFxPrLnKn79N8KtIIK/ELW+uaIEO+4R/ScjfsR+1758isque7siEALtlmq7I2W9ggVQVduXJkoRjR9tkAO5DdHFoWdJ6wAwavkGtAmgGVWk/tkZhprgwKF8UC9ImIfyJGVKyhwVzu+u6D8XUI/TUHov3ZoAy9wCITCZVc7A9idPfq10nxu/b+P3W4cnLOmK3S7t3zqO6nP8OIVVooQH/Er35llkeYT+Noxgfr6B4KP/y2CIk+Pn23OUoeglWByQCRokyA45q5Omsf8cXddVbfuOfArmE7mp1cL1a4tEoaD8RzNspd7VuDenntDKpR6+4SmIstmcU/XdOrX8OkB0yYTjWkLA6iBqklFqMrCSPB7ZZUb4=
-#  - secure: exhWNlrsAbxghGG9cVblAVtJAPP9ZvlHflap9mBGgl0D3nSXDMtNESYHsIDI5v22Pl02SORTtQNc308ttk/7dFRJXr8DKKBfDvPkXV/j9KnA+TOu3dOQuqHMR2TRsFyfDeyLMCOazlYZMfryZCsf8EuUnF3TNLeHXcPxDveJPZ5vEnuveJcZmr57g+pS8POJnuM5X6VzrrmA4PGVKzwnWztNGoETi4iES9/61bB35jnllNdBi0R63QmbTzLvrSLCjPxOwjeymQbpqnxDDYOuXUPdtU5RrjvX1jzFCHbaJWtHvi45t26ufX7e1ob4tplFoX14fRzrQYiE2557x7AN18UJsIOrQ30OO+W78rk8feUamsVNyOeo6jnHoi4AeUPShoZ3dt42Z5dQ20rWoD0amqapIry7EORzrUIsgUHRATIypa/kVYlf2pVmQ930LelWlEtiLHPXuviaWeSPmipXkQi0mZY96X3C/fy+LzrpNrQJsK0ucUlM46SVUUWOHtO+OK8WyT7OiQaGsAa3OhRVaql21gM/X8uA9P0OB/Rdag3SEkZlpNjAn6qcqNgopGDGfEOyqC4f17YDeHQGWad12tygC/y29el3Xzi5Rm9J9zeMdJ7K+EPSqhwqnbeos8pSDCBeY2XHF0fzjih1BABNxopSVDdk4+Opl7zWBRHmxm8=
-#  - secure: ZhQtf6fEJ15PtdmQP8TVMdxPytA0lKqfb2CC4nDxJffG+RdRmHj5mmPtNB2hNml3LnYnwbbBnQLDzn7IDzEuzaQ2rUrdXx93LcexLq3DPwyXi5vr7na8ShB+Ksl53tMe+NiyGADVrsFOgwedAQMt4q7FU+FGOfOVK44hHQOUIQ5Z26vUUW9fdZHX55S5njCtrG9ir/tL724RD37XGmHITbd/A2VAXPuDz5HUilU0qWx/4huzZNCQO6fhuEmI8FFMJidvqSIA/LYNXJqg32wpodDQZskhmoq4lhBoi6vu09HSL7aWtb286R2XS2Gqx4+ITVMbod+ez/qeaujz4bEEG3WSdB+tTOziAie5CyLWtIG2ReLhdRnrABnHnMVPjW/879u++HnPtTDJ0NeF+ZN4QLJ3s/wmilP/EWn6peAJHbyQMpIezub6h2AnPTIGuMOJ6xPAsOd6fenW+FfNopDj9JGoWIx70a8UcrftNFpI2+p1ZxLABCcMcFSv2r6L3hn1ujMHR+/oaRRyaPmEwbMfKJLcKFsF1DeScws7+qop1mDMMtQ0lqzRQSfqJlGyXRPW/eLRuFqD7Pf9A8HKI/6l8eZd3L9yPSq04cRMaMRX2iOEZd7BIfsRvRzxfzwJLgbTD6QSamiLsWy5dhnLwPkGamlbSpdG3m+66pRE6VtYKAs=
-#  - secure: egFL2wg8DAhkl7MzyU/hrx3J/pwsvoOfz4CWDP5UJnzNkeXAma9Wpdk1+0UtOzlwKZ0tziKe1+6JpHAcHTgLY/SR4XUs0+7Jkc+igQOsa6OmxFfcnUSfxU/mhtpzfNIdq+cxNGN0vYuvK3KAfkE07qdbUF/ZJmhlFqVa1kRBpci2KYxcF0599aeWmcQpoLePHWUuujlbYEiLHF5rrhZeeWULafiNlW97RWynurpgjM/Om7r9BUd6BUR9xQhBQ5FzsN5PASSdjZjD2qjMLnbCF8k71CO1HkvA9PN8VWK3FEddsgA32livf+zE9RvlbDaZq2QmXgSVPMy5Hmi5Q2SiBn3s+f1hoLnXj/vJdA/vnIJzO1F8mN2Ykd0H8/aINVWr2nM3FglGTrD1bv3It1yqA/EKH1vZbQTEp/goV1ehjg49U8+WD3a5UVr6nh3trec69nqN+XlYGTTQoQa58JNy/uticZiytQgG3w+V7vCzmgVL6m+ZCvLLjZ79S5Ebh9JNNYX9DMkEVPQrPPpwpyTa5EAEZkgzHbktpVEVacfITIRhbtKJXKJ1mhmEnVTN4Wp1BQUoQEVTx685ih/wXvphtmBj1Pr0d2mxVA++1g7v8HKAxLalQ9wJ9Ss7YnCMEvShaAMc/Me6RGTuwhpDcUS5hQCOU9aTupT5yVottNDEBMs=
