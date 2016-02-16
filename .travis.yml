@@ -40,10 +40,9 @@ after_success:
 - echo ${DEPLOYMENT_ARCHIVE}
 - node --version
 - npm install -g appdmg
-- pip install dmgbuild
-- dmgbuild -s ${TRAVIS_BUILD_DIR}/src/Tools/DMGSettings.py "${VSN}" ${DEPLOYMENT_ARCHIVE}
-- #travis_retry curl --ftp-create-dirs -T ${DEPLOYMENT_ARCHIVE} -u ${FTP_USER}:${FTP_PASSWORD} ftp://${FTP_HOST}/${DEPLOYMENT_ARCHIVE}
 - brew install jq
+- git clone https://github.com/andreyvit/create-dmg.git
+- ./create-dmg/create-dmg --volname "${VSN}" --volicon "/usr/local/FreeCAD.app/Contents/Resources/freecad.icns" --window-pos 200 120 --window-size 400 200 --icon-size 100 --app-drop-link 300 93 --icon FreeCAD.app 100 94 "${DEPLOYMENT_ARCHIVE}" /usr/local/FreeCAD.app
 - export UPLOAD_URL=$(curl -s -u "${GH_TOKEN}" "https://api.github.com/repos/${TRAVIS_REPO_SLUG}/releases" | jq ".[] | select(.name==\"${GH_RELEASE_NAME}\").upload_url" | cut -d '{' -f 1 | cut -c 2- )
 - echo "${UPLOAD_URL}"
 - if [ -n "${UPLOAD_URL}" ]; then curl -X POST -s -u "${GH_TOKEN}" -H "Content-Type:application/x-apple-diskimage" --data-binary "@${DEPLOYMENT_ARCHIVE}" "${UPLOAD_URL}?name=${DEPLOYMENT_ARCHIVE}"; fi
