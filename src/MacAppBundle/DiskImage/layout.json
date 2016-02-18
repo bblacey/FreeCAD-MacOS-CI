@@ -2,11 +2,11 @@
  
   "title": "FreeCAD",
  
-  "icon": "/usr/local/FreeCAD.app/Contents/Resources/freecad.icns",
+  "icon": "../FreeCAD.app/Contents/Resources/freecad.icns",
  
   "icon-size": 80,
 
-  "background": "../src/MacAppBundle/DiskImage/background.png",
+  "background": "background.png",
  
   "contents": [
  
