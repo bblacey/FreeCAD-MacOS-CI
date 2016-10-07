@@ -25,6 +25,8 @@ env:
 
 cache:
     ccache: true
+    directories:
+      - "/usr/local"
 
 language: cpp
 python: 2.7
@@ -122,11 +124,11 @@ before_install:
        brew update >/dev/null
        xcodebuild -version -sdk
        brew --config
-       if [ "${OSX_PORTS_CACHE}X" != "X" ]; then
-            brew install jq
-            cacheContext=$(create_helper_context repo=${OSX_PORTS_CACHE} auth_token=${GH_TOKEN} release=${FREECAD_RELEASE})
-            prime_local_ports_cache $cacheContext
-       fi
+       #if [ "${OSX_PORTS_CACHE}X" != "X" ]; then
+       #     brew install jq
+       #     cacheContext=$(create_helper_context repo=${OSX_PORTS_CACHE} auth_token=${GH_TOKEN} release=${FREECAD_RELEASE})
+       #     prime_local_ports_cache $cacheContext
+       #fi
 
        brew tap FreeCAD/freecad
        brew install --verbose --only-dependencies freecad --with-freecad-bottles
@@ -168,6 +170,17 @@ script:
   - sleep 10 && pkill FreeCAD
   - cat /tmp/FreeCAD_installed.log
   - grep --file=../.log_errors /tmp/FreeCAD_installed.log ; [ $? == 1 ] && echo "No errors from .log_errors file found in the log after start from /usr/local/bin" || ( echo "Error from .log_errors found!" && false )
+
+before_cache:
+###
+#  Prune the hombrew ports to just what we need to build FreeCAD
+##
+  - |
+    comm -23 <(brew list --full-name | sort) \
+             <(brew deps freecad --with-freecad-bottles --full-name --include-build --include-recommended | sort) \
+             | xargs brew uninstall
+  - brew cleanup
+  - find $(brew --cellar opencascade) -type d -depth 2 -a \( -name doc -o -name src \) -exec rm -rf {} \;
 
 after_success:
 ####
