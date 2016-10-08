@@ -26,7 +26,17 @@ env:
 cache:
     ccache: true
     directories:
-      - "/usr/local"
+      - "/usr/local/Cellar"
+      - "/usr/local/Frameworks"
+      - "/usr/local/Homebrew"
+      - "/usr/local/bin"
+      - "/usr/local/etc"
+      - "/usr/local/include"
+      - "/usr/local/lib"
+      - "/usr/local/opt"
+      - "/usr/local/sbin"
+      - "/usr/local/share"
+      - "/usr/local/var"
 
 language: cpp
 python: 2.7
