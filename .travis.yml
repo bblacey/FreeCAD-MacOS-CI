@@ -177,14 +177,16 @@ script:
 
 before_cache:
 ###
-#  Prune the hombrew ports to just what we need to build FreeCAD
+#  Prune the hombrew ports to just what we need to build and package FreeCAD
 ##
+  - du -h -d 0 $(brew --prefix)
   - |
-    comm -23 <(brew list --full-name | sort) \
+    comm -23 <(brew list --full-name | grep -v -e 'node' -e 'jq' -e 'oniguruma' | sort) \
              <(brew deps freecad --with-freecad-bottles --full-name --include-build --include-recommended | sort) \
              | xargs brew uninstall
   - brew cleanup
   - find $(brew --cellar opencascade) -type d -depth 2 -a \( -name doc -o -name src \) -exec rm -rf {} \;
+  - du -h -d 0 $(brew --prefix)
 
 after_success:
 ####
