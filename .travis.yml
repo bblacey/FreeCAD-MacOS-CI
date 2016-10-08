@@ -121,6 +121,7 @@ before_install:
        ;;
 
    "osx")
+       brew --config
        brew update >/dev/null
        xcodebuild -version -sdk
        brew --config
@@ -192,8 +193,8 @@ after_success:
 - |
   if [ "${TRAVIS_OS_NAME}" == "osx" -a "${TRAVIS_PULL_REQUEST}" == "false" ]; then
      brew ls --versions jq || brew install jq
-     brew uninstall node && brew install node
-     npm install -g appdmg
+     brew uninstall node
+     brew install node && npm install -g appdmg
      export VSN=$(python ${TRAVIS_BUILD_DIR}/src/Tools/ArchiveNameFromVersionHeader.py ${TRAVIS_BUILD_DIR}/build/src/Build/Version.h)
      export DEPLOYMENT_ARCHIVE=${VSN}.dmg
      appdmg ${TRAVIS_BUILD_DIR}/src/MacAppBundle/DiskImage/layout.json "${DEPLOYMENT_ARCHIVE}"
