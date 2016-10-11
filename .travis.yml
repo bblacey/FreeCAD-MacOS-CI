@@ -26,7 +26,7 @@ env:
 cache:
     ccache: true
     directories:
-      - "${TRAVIS_BUILD}/.homebrew"
+      - "${TRAVIS_BUILD_DIR}/.homebrew"
 
 language: cpp
 python: 2.7
@@ -121,9 +121,11 @@ before_install:
        ;;
 
    "osx")
+       echo "Path is: ${PATH}"
        brew --config
        sudo rm -rf $(brew --prefix)
-       mkdir ${TRAVIS_BUILD}/.homebrew && curl -L https://github.com/Homebrew/brew/tarball/master | tar xz --strip 1 -C ${TRAVIS_BUILD}/.homebrew
+       curl -L https://github.com/Homebrew/brew/tarball/master | tar xz --strip 1 -C ${TRAVIS_BUILD_DIR}/.homebrew
+       export PATH="${TRAVIS_BUILD_DIR}/.homebrew/bin:/usr/bin:/bin:/usr/sbin:/sbin"
        xcodebuild -version -sdk
        brew --config
        #if [ "${OSX_PORTS_CACHE}X" != "X" ]; then
