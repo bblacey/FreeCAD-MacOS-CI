@@ -26,17 +26,7 @@ env:
 cache:
     ccache: true
     directories:
-      - "/usr/local/Cellar"
-      - "/usr/local/Frameworks"
-      - "/usr/local/Homebrew"
-      - "/usr/local/bin"
-      - "/usr/local/etc"
-      - "/usr/local/include"
-      - "/usr/local/lib"
-      - "/usr/local/opt"
-      - "/usr/local/sbin"
-      - "/usr/local/share"
-      - "/usr/local/var"
+      - "${TRAVIS_BUILD}/.homebrew"
 
 language: cpp
 python: 2.7
@@ -132,7 +122,8 @@ before_install:
 
    "osx")
        brew --config
-       brew update >/dev/null
+       sudo rm -rf $(brew --prefix)
+       mkdir ${TRAVIS_BUILD}/.homebrew && curl -L https://github.com/Homebrew/brew/tarball/master | tar xz --strip 1 -C ${TRAVIS_BUILD}/.homebrew
        xcodebuild -version -sdk
        brew --config
        #if [ "${OSX_PORTS_CACHE}X" != "X" ]; then
@@ -150,12 +141,10 @@ before_install:
           curl -o /tmp/3dFW.dmg -L 'http://www.3dconnexion.com/index.php?eID=sdl&ext=tx_iccsoftware&oid=a273bdbc-c289-e10d-816b-567043331c9e&filename=3DxWareMac_v10-4-1_r2428.dmg'
           hdiutil attach -readonly /tmp/3dFW.dmg
           sudo installer -package /Volumes/3Dconnexion\ Software/Install\ 3Dconnexion\ software.pkg -target /
+          diskutil eject /Volumes/3Dconnexion\ Software
        fi
 
-       #Remove GDAL if installed because it results in non-existent dependent library exceptions
-       if [ -e /usr/local/lib/libgdal.1.dylib ]; then brew unlink gdal; fi
-
-       export CMAKE_ARGS="${CMAKE_OPTS} -DFREECAD_USE_EXTERNAL_KDL=ON -DFREECAD_CREATE_MAC_APP=ON"
+       export CMAKE_ARGS="${CMAKE_OPTS} -DFREECAD_USE_EXTERNAL_KDL=ON -DFREECAD_USE_EXTERNAL_PIVY=ON -DFREECAD_CREATE_MAC_APP=ON"
        export INSTALLED_APP_PATH="/usr/local/FreeCAD.app/Contents/bin/FreeCAD"
        ;;
 
@@ -188,8 +177,8 @@ before_cache:
 ##
   - du -h -d 0 $(brew --prefix)
   - |
-    comm -23 <(brew list --full-name | grep -v -e 'node' -e 'jq' -e 'oniguruma' | sort) \
-             <(brew deps freecad --with-freecad-bottles --full-name --include-build --include-recommended | sort) \
+    comm -23 <(brew list --full-name | sort) \
+             <(brew deps freecad --full-name --with-freecad-bottles --with-packaging-utils --include-build --include-recommended | sort) \
              | xargs brew uninstall
   - brew cleanup
   - find $(brew --cellar opencascade) -type d -depth 2 -a \( -name doc -o -name src \) -exec rm -rf {} \;
